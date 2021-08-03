@@ -23,13 +23,7 @@ namespace jquery_ajax_aspnet_core.Controllers
     [HttpGet]
     public Numbers Calculate(int number1, int number2)
     {
-      Numbers numbers = new Numbers();
-      numbers.Add = number1 + number2;
-      numbers.Substract = number1 - number2;
-      numbers.Multiply = number1 * number2;
-      numbers.Divide = (decimal)number1 / number2;
-
-      return numbers;
+     
     }
   }
 }
