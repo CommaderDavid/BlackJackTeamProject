@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace jquery_ajax_aspnet_core.Controllers
+namespace BlackJackTeamProject.Controllers
 {
   public class HomeController : Controller
   {
@@ -23,7 +23,7 @@ namespace jquery_ajax_aspnet_core.Controllers
     [HttpGet]
     public Numbers Calculate(int number1, int number2)
     {
-     
+
     }
   }
 }

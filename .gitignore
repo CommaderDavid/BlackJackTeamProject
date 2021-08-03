@@ -1,5 +1,5 @@
 .vscode/
-.vs/
 obj/
+bin.
 .env
 
