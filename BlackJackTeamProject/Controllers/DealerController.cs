@@ -1,29 +1,48 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using BlackJackTeamProject.Models;
 using Microsoft.AspNetCore.Mvc;
-
+//using .net 3.1 
 
 namespace BlackJackTeamProject.Controllers
 {
-  public class HomeController : Controller
+  public class DealerController : Controller
   {
     public IActionResult Index()
     {
       return View();
     }
 
-    [HttpPost]
-    public int Add(int number1, int number2)
+
+    [HttpGet]
+    public List<Card> ShuffleAndReturnDeck()
     {
-      return number1 + number2;
+      Deck.EmptyNewDeckAndDeck();
+      Deck.BuildDeck();
+      return Deck.ShuffleDeck();
     }
 
     [HttpGet]
-    public Numbers Calculate(int number1, int number2)
+    public List<Card> GetDeck()
     {
+      if (Deck.deck.Count == 0)
+      {
+        return Deck.ShuffleDeck();
+      }
+      else
+        return Deck.deck;
+    }
 
+
+    [HttpGet]
+    public List<Card> DeckDeal()
+    {
+      if (Deck.deck.Count == 0)
+      {
+        return Deck.ShuffleDeck();
+      }
+      else
+        return Deck.deck;
     }
   }
 }
