@@ -6,7 +6,6 @@ namespace BlackJackTeamProject.Models
 {
   public static class Deck
   {
-    private static int id = 1;
     private static List<string> ranks = new List<string>() { "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King" };
     public static List<Card> NewDeck = new List<Card>();
 
@@ -25,8 +24,7 @@ namespace BlackJackTeamProject.Models
       ranks.ForEach(
           item =>
           {
-            NewDeck.Add(new Card(suit, color, item, id));
-            id++;
+            NewDeck.Add(new Card(suit, color, item));
           });
     }
 
