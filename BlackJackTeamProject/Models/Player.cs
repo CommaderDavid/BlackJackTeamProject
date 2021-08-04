@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace BlackJackTeamProject.Models
 {
 	public class Player
@@ -12,7 +14,7 @@ namespace BlackJackTeamProject.Models
 		public string Name { get; set; }
 		public float RoundScore { get; set; }
 		public PlayerState State { get; set; }
-		// TODO: Player hand
+		public List<Card> Hand { get; set; }
 
 		public Player(string name)
 		{

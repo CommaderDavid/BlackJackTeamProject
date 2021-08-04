@@ -5,8 +5,6 @@ namespace  BlackJackTeamProject.Models
 {
 	public class Logic
 	{
-		public List<Player> Players { get; set;}
-
 		// Adds the given score to the player's current score
 		public void UpdateRoundScoreForPlayer(Player player, float score)
 		{
@@ -21,9 +19,9 @@ namespace  BlackJackTeamProject.Models
 			float topScore;
 
 			// Iterates through each player to get all scores
-			for (int i = 0; i < Players.Count; i++)
+			for (int i = 0; i < Game.Players.Count; i++)
 			{
-				Player player = Players[i];
+				Player player = Game.Players[i];
 				if (player.State != Player.PlayerState.Lost)
 				{
 					allPlayerScores.Add(player, player.RoundScore);
