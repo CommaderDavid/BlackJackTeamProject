@@ -10,7 +10,7 @@ namespace BlackJackTeamProject.Models
     private static List<string> ranks = new List<string>() { "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King" };
     public static List<Card> NewDeck = new List<Card>();
 
-    public static List<Card> deck;
+    public static List<Card> deck = new List<Card>();
 
     public static void BuildDeck()
     {
