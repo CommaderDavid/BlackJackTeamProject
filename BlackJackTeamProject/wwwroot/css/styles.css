@@ -1,0 +1,49 @@
+html {
+    position: relative;
+    min-height: 100%;
+    background-color: #002700;
+}
+
+body {
+    background-color: #004900;
+    margin: 0 0 40px;
+    /* bottom = footer height */
+    padding: 0px;
+}
+
+header{
+    color: rgb(0, 2, 109);
+    /*border: 1px solid yellow;*/
+    text-align: center;
+    padding: 10px;
+}
+
+p:hover {
+   background-color: green; 
+}
+
+.player{
+    margin-top: 15px;
+    /*font-size: 25px;*/
+    color: white;
+    /*border: 1px solid white;*/
+    text-align: center;
+}
+
+.dealer{
+    /*font-size: 25px;*/
+    color: rgb(161, 0, 161);
+    /*border: 1px solid black;*/
+    text-align: center;
+}
+
+.dealers_cards, .players_cards{
+    /*width: 600px;*/
+    overflow: hidden;
+    margin: auto;
+    display: inline-block;
+    padding: 10px 40px 10px 10px;
+    color: grey;
+    /*height: 110px;*/
+    /*border: 1px solid yellow;*/
+}
