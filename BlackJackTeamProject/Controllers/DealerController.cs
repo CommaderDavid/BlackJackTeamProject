@@ -6,43 +6,33 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BlackJackTeamProject.Controllers
 {
+  [Produces("application/json")]
+  [Route("/dealer")]
   public class DealerController : Controller
   {
-    public IActionResult Index()
+
+    [Route("/dealer/card")]
+    [HttpGet]
+    public Card GetCard()
     {
-      return View();
+      if (Deck.deck.Count == 0)
+      {
+        Deck.EmptyNewDeckAndDeck();
+        Deck.BuildDeck();
+        Deck.ShuffleDeck();
+      }
+
+      return Deck.DealACard();
     }
 
-
+    [Route("/dealer/empty")]
     [HttpGet]
-    public List<Card> ShuffleAndReturnDeck()
+    public void Empty()
     {
       Deck.EmptyNewDeckAndDeck();
-      Deck.BuildDeck();
-      return Deck.ShuffleDeck();
-    }
-
-    [HttpGet]
-    public List<Card> GetDeck()
-    {
-      if (Deck.deck.Count == 0)
-      {
-        return Deck.ShuffleDeck();
-      }
-      else
-        return Deck.deck;
     }
 
 
-    [HttpGet]
-    public List<Card> DeckDeal()
-    {
-      if (Deck.deck.Count == 0)
-      {
-        return Deck.ShuffleDeck();
-      }
-      else
-        return Deck.deck;
-    }
+
   }
 }
