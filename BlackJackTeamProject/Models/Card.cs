@@ -6,14 +6,12 @@ namespace BlackJackTeamProject.Models
         public string Color{get; set;}
         public string Rank{get;set;}
 
-        public int Id {get;set;}
 
-        public Card(string suit, string color, string rank, int id)
+        public Card(string suit, string color, string rank)
         {
             Suit = suit;
             Color = color;
             Rank = rank;
-            Id = id;
         }
     }
 }
