@@ -26,9 +26,9 @@ namespace BlackJackTeamProject.Models
             {
                 for (int i = 0; i < 2; i++)
                 {
-					Card newCard = Deck.DealCard(); // Get new card
+                    Card newCard = Deck.DealCard(); // Get new card
                     player.Hand.Add(newCard); // Add card to player's hand
-					player.RoundScore += newCard.Value; // Update player's score
+                    player.RoundScore += newCard.Value; // Update player's score
                 }
             }
         }
@@ -52,10 +52,48 @@ namespace BlackJackTeamProject.Models
             }
         }
 
-        public void Bust()
+        public void DealerHit()
         {
-            CurrentPlayer.RoundScore = 0; // Reset player's score
-            ChangePlayerTurn();
+            Card newCard = Deck.DealCard(); // Get new card
+            Dealer.Hand.Add(newCard); // Add card to player's hand
+            if (newCard.Rank == "Ace")
+            {
+                if (Dealer.RoundScore + 11 <= 21)
+                {
+                    Dealer.RoundScore += 11; // Update player's score
+                }
+                else
+                {
+                    Dealer.RoundScore += 1; // Update player's score
+                }
+            }
+            else
+            {
+                Dealer.RoundScore += newCard.Value; // Update player's score
+            }
+
+
+            // Check for bust
+            if (Dealer.RoundScore > 21)
+            {
+                Bust(true);
+            }
+
+            if (Dealer.RoundScore >= 17)
+            {
+                EndGame();
+            }
+
+			DealerHit();
+        }
+
+        public void Bust(bool isDealer = false)
+        {
+            if (!isDealer)
+            {
+                CurrentPlayer.RoundScore = 0; // Reset player's score
+                ChangePlayerTurn();
+            }
         }
 
         public void EndGame()
