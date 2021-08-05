@@ -22,7 +22,7 @@ p:hover {
    background-color: green; 
 }
 
-.player{
+#player{
     margin-top: 15px;
     /*font-size: 25px;*/
     color: white;
@@ -30,7 +30,7 @@ p:hover {
     text-align: center;
 }
 
-.dealer{
+#dealer{
     /*font-size: 25px;*/
     color: rgb(161, 0, 161);
     /*border: 1px solid black;*/
@@ -46,4 +46,8 @@ p:hover {
     color: grey;
     /*height: 110px;*/
     /*border: 1px solid yellow;*/
+}
+
+#game {
+    display: none;
 }
