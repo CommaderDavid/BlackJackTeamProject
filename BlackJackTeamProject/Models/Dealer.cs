@@ -5,14 +5,12 @@ namespace BlackJackTeamProject.Models
   public class Dealer
   {
     public string Name = "Dealer";
-    public float RoundScore { get; set; }
-    public Player.PlayerState State { get; set; }
+    public float RoundScore{get; set;}
     public List<Card> Hand { get; set; }
 
-    public Dealer(string name)
+    public Dealer()
     {
       RoundScore = 0;
-      State = Player.PlayerState.InactiveTurn;
     }
   }
 }

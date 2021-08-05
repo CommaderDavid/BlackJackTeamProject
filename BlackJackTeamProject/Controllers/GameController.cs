@@ -44,10 +44,17 @@ namespace BlackJackTeamProject.Controllers
     }
 
     [HttpPost]
-    [Route("/hold/{name}")]
-    public void hold(string name)
+    [Route("/hit/{name}")]
+    public void hit(string name)
     {
 
+    }
+
+    [HttpPost]
+    [Route("/hold/")]
+    public void hold()
+    {
+      Game.Hold();
     }
 
     [HttpPost]
