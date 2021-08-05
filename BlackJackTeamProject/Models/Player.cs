@@ -1,26 +1,31 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BlackJackTeamProject.Models
 {
-	public class Player
-	{
-		public enum PlayerState
-		{
-			ActiveTurn,
-			InactiveTurn,
-			Lost
-		}
+  public class Player
+  {
+    public string Name { get; set; }
+    public float RoundScore { get; set; }
+    public List<Card> Hand { get; set; }
 
-		public string Name { get; set; }
-		public float RoundScore { get; set; }
-		public PlayerState State { get; set; }
-		public List<Card> Hand { get; set; }
+    public Player(string name)
+    {
+      Name = name;
+      RoundScore = 0;
+    }
 
-		public Player(string name)
-		{
-			Name = name;
-			RoundScore = 0;
-			State = PlayerState.InactiveTurn;
-		}
-	}
+    public void GetAceScore()
+    {
+      List<Card> aces = Hand.Where(x => x.Rank == "Ace").ToList();
+
+      foreach (Card ace in aces)
+      {
+        if (RoundScore + 10 <= 21)
+        {
+          RoundScore += 10;
+        }
+      }
+    }
+  }
 }

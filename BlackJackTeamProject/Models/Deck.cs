@@ -34,7 +34,7 @@ namespace BlackJackTeamProject.Models
       NewDeck = new List<Card>();
     }
 
-    public static List<Card> ShuffleDeck()
+    private static List<Card> ShuffleDeck()
     {
       Random rnd = new Random();
       deck = NewDeck.Select(x => new { value = x, order = rnd.Next() })
@@ -44,7 +44,11 @@ namespace BlackJackTeamProject.Models
       //https://stackoverflow.com/questions/273313/randomize-a-listt
     }
 
-    public static Card DealACard()
+    public static void Shuffle(){
+      EmptyNewDeckAndDeck();
+      ShuffleDeck();
+    }
+    public static Card DealCard()
     {
       Card card = Deck.deck[0];
       Deck.deck.RemoveAt(0);
