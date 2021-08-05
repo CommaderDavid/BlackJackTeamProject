@@ -22,11 +22,11 @@ p:hover {
    background-color: green; 
 }
 
-.player{
+#player{
     margin-top: 15px;
-    /*font-size: 25px;*/
+    font-size: 25px;
+    border: black solid 5px;
     color: white;
-    /*border: 1px solid white;*/
     text-align: center;
 }
 
@@ -46,4 +46,8 @@ p:hover {
     color: grey;
     /*height: 110px;*/
     /*border: 1px solid yellow;*/
+}
+
+#game {
+    text-align: center;
 }
