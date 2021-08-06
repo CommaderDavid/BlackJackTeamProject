@@ -36,6 +36,12 @@ namespace BlackJackTeamProject.Controllers
       return Game.CurrentPlayer.Hand;
     }
 
+    [Route("/start")]
+    public void StartGame()
+    {
+      Game.game.StartGame();
+    }
+
     [HttpPost]
     [Route("/hit/{name}")]
     public void hit(string name)
