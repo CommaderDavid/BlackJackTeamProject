@@ -15,7 +15,7 @@ namespace BlackJackTeamProject.Controllers
       return View();
     }
 
-    // GET: Home  
+    // GET: Home
     [HttpGet]
     [Route("/showhand/{name}")]
     public List<Card> ShowHandByName(string name)
@@ -44,17 +44,10 @@ namespace BlackJackTeamProject.Controllers
     }
 
     [HttpPost]
-    [Route("/hit/{name}")]
-    public void hit(string name)
-    {
-
-    }
-
-    [HttpPost]
     [Route("/hold/")]
     public void hold()
     {
-      Game.Hold();
+
     }
 
     [HttpPost]
@@ -66,5 +59,3 @@ namespace BlackJackTeamProject.Controllers
     }
   }
 }
-
-
