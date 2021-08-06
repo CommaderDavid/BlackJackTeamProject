@@ -1,59 +1,113 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace BlackJackTeamProject.Models
 {
-	public class Game
-	{
-		public static List<Player> Players { get; set; }
-		public static Player CurrentPlayer { get; set; }
+    public class Game
+    {
+        public static Game game = new Game();
+        public static List<Player> Players { get; set; }
+        public static Player CurrentPlayer { get; set; }
+        public int CurrentPlayerIndex = 0;
 
-		public void StartGame()
-		{
-			Players[0].State = Player.PlayerState.ActiveTurn; // Set player 1 as active
+        public static Dealer Dealer { get; set; }
 
-			// TODO: Randomize deck
-			// TODO: Deal cards
-			// TODO: Set player turn (for mvp just set dealer or player)
-		}
+        // Deals out cards & sets active player
+        public void StartGame()
+        {
+            CurrentPlayer = Players[CurrentPlayerIndex]; // Set player 1 as active
+            Deck.Shuffle(); // Shuffle the deck
+            Deal(); // Deal cards
+        }
 
-		public void Hold()
-		{
-			CurrentPlayer.State = Player.PlayerState.InactiveTurn; // End player's turn
-		}
+        // Deal 2 cards to each player
+        public void Deal()
+        {
+            foreach (Player player in Players)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    Card newCard = Deck.DealCard(); // Get new card
+                    player.Hand.Add(newCard); // Add card to player's hand
+                    player.RoundScore += newCard.Value; // Update player's score
+                }
+            }
+        }
 
-		public void Hit()
-		{
-			CurrentPlayer.Hand.Add(Deck.DealACard());
+        public void Hold()
+        {
+            CurrentPlayer.GetAceScore();
+            ChangePlayerTurn();
+        }
 
-			// TODO: Update player's score
-			// TODO: Check player score for > 21
-			// TODO: Player's turn continues if < 21
-		}
+        public void Hit()
+        {
+            Card newCard = Deck.DealCard(); // Get new card
+            CurrentPlayer.Hand.Add(newCard); // Add card to player's hand
+            CurrentPlayer.RoundScore += newCard.Value; // Update player's score
 
-		public void Bust()
-		{
-			CurrentPlayer.State = Player.PlayerState.Lost; // End player's turn
-			CurrentPlayer.RoundScore = 0; // Reset player's score
-		}
+            // Check for bust
+            if (CurrentPlayer.RoundScore > 21)
+            {
+                Bust();
+            }
+        }
 
-		public void EndGame()
-		{
-			// TODO: End all turns (if not already)
-			// TODO: Show final results
-			// TODO: Allow starting new game
-		}
+        public void DealerHit()
+        {
+            Card newCard = Deck.DealCard(); // Get new card
+            Dealer.Hand.Add(newCard); // Add card to player's hand
+            if (newCard.Rank == "Ace")
+            {
+                if (Dealer.RoundScore + 11 <= 21)
+                {
+                    Dealer.RoundScore += 11; // Update player's score
+                }
+                else
+                {
+                    Dealer.RoundScore += 1; // Update player's score
+                }
+            }
+            else
+            {
+                Dealer.RoundScore += newCard.Value; // Update player's score
+            }
 
-		// Returns the active player
-		public Player GetCurrentPlayer()
-		{
-			CurrentPlayer = Players.First(player => player.State == Player.PlayerState.ActiveTurn);
-			return CurrentPlayer;
-		}
 
-		public void ChangePlayerTurn()
-		{
-			// TODO: Update current player
-		}
-	}
+            // Check for bust
+            if (Dealer.RoundScore > 21)
+            {
+                Bust(true);
+            }
+
+            if (Dealer.RoundScore >= 17)
+            {
+                EndGame();
+            }
+
+			DealerHit();
+        }
+
+        public void Bust(bool isDealer = false)
+        {
+            if (!isDealer)
+            {
+                CurrentPlayer.RoundScore = 0; // Reset player's score
+                ChangePlayerTurn();
+            }
+        }
+
+        public void EndGame()
+        {
+            // TODO: End all turns (if not already)
+            // TODO: Show final results
+            // TODO: Allow starting new game
+        }
+
+        // Changes play to next player's turn
+        public void ChangePlayerTurn()
+        {
+            CurrentPlayerIndex += 1; // Increment index
+            CurrentPlayer = Players[CurrentPlayerIndex]; // Set current player
+        }
+    }
 }
