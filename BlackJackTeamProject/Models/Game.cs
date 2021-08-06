@@ -86,7 +86,7 @@ namespace BlackJackTeamProject.Models
                 EndGame();
             }
 
-			DealerHit();
+            DealerHit();
         }
 
         public void Bust(bool isDealer = false)
