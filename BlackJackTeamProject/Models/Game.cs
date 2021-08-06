@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BlackJackTeamProject.Models
 {
@@ -109,5 +110,30 @@ namespace BlackJackTeamProject.Models
             CurrentPlayerIndex += 1; // Increment index
             CurrentPlayer = Players[CurrentPlayerIndex]; // Set current player
         }
+
+		public List<Player> GetWinners()
+		{
+			Dictionary<Player, float> allPlayerScores = new Dictionary<Player, float>();
+			List<Player> playersWithTopScore = new List<Player>();
+			float topScore;
+
+			// Iterates through each player to get all scores
+			for (int i = 0; i < Game.Players.Count; i++)
+			{
+				Player player = Game.Players[i];
+				allPlayerScores.Add(player, player.RoundScore);
+			}
+
+			// Sets the top score
+			topScore = allPlayerScores.Values.Max();
+
+			// Iterates through each score to determine which players scored the highest
+			foreach (KeyValuePair<Player, float> kvp in allPlayerScores)
+			{
+				if (kvp.Value >= topScore) playersWithTopScore.Add(kvp.Key);
+			}
+
+			return playersWithTopScore;
+		}
     }
 }
