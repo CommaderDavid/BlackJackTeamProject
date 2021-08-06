@@ -18,32 +18,42 @@ header{
     padding: 10px;
 }
 
-p:hover {
-   background-color: green; 
+img:hover {
+   background-color: green;
+   border: green solid 5px;
 }
 
-.player{
+#player{
+
+    width: 400px;
+    font-size: 25px;
+    border: black solid 5px;
+    display:inline-table;
+}
+
+#dealer{
     margin-top: 15px;
-    /*font-size: 25px;*/
     color: white;
-    /*border: 1px solid white;*/
+  /*font-size: 25px;*/
     text-align: center;
+    color: rgb(161, 0, 161);
+    border: 5px solid black;
+    display: block;
 }
 
-.dealer{
-    /*font-size: 25px;*/
-    color: rgb(161, 0, 161);
-    /*border: 1px solid black;*/
-    text-align: center;
-}
+
 
 .dealers_cards, .players_cards{
     /*width: 600px;*/
     overflow: hidden;
     margin: auto;
-    display: inline-block;
     padding: 10px 40px 10px 10px;
     color: grey;
     /*height: 110px;*/
     /*border: 1px solid yellow;*/
+}
+
+#game {
+    text-align: center;
+    display: none;
 }
