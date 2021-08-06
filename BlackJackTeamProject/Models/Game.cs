@@ -6,7 +6,7 @@ namespace BlackJackTeamProject.Models
     public class Game
     {
         public static Game game = new Game();
-        public static List<Player> Players { get; set; }
+        public static List<Player> Players = new List<Player>();
         public static Player CurrentPlayer { get; set; }
         public int CurrentPlayerIndex = 0;
 
@@ -15,7 +15,7 @@ namespace BlackJackTeamProject.Models
         // Deals out cards & sets active player
         public void StartGame()
         {
-			CurrentPlayerIndex = 0;
+            CurrentPlayerIndex = 0;
             CurrentPlayer = Players[CurrentPlayerIndex]; // Set player 1 as active
             Deck.Shuffle(); // Shuffle the deck
             Deal(); // Deal cards
@@ -100,10 +100,10 @@ namespace BlackJackTeamProject.Models
 
         public void EndGame()
         {
-			// TODO: Check for rounds remaining to see if new round can be made, otherwise determine overall winner
-			// TODO: (frontend) Show final results and a start new round button which calls StartGame()
-			GetRoundWinners();
-			CurrentPlayer = null; // No active player
+            // TODO: Check for rounds remaining to see if new round can be made, otherwise determine overall winner
+            // TODO: (frontend) Show final results and a start new round button which calls StartGame()
+            GetRoundWinners();
+            CurrentPlayer = null; // No active player
         }
 
         // Changes play to next player's turn
@@ -111,41 +111,41 @@ namespace BlackJackTeamProject.Models
         {
             CurrentPlayerIndex += 1; // Increment index
 
-			// If all players have played (when game is over)
-			if (CurrentPlayerIndex >= Players.Count)
-			{
-				CurrentPlayer = null;
-			}
-			else
-			{
-				CurrentPlayer = Players[CurrentPlayerIndex]; // Set current player
-			}
+            // If all players have played (when game is over)
+            if (CurrentPlayerIndex >= Players.Count)
+            {
+                CurrentPlayer = null;
+            }
+            else
+            {
+                CurrentPlayer = Players[CurrentPlayerIndex]; // Set current player
+            }
         }
 
-		public List<Player> GetRoundWinners()
-		{
-			Dictionary<Player, float> allPlayerScores = new Dictionary<Player, float>();
-			List<Player> playersWithTopScore = new List<Player>();
-			float topScore;
+        public List<Player> GetRoundWinners()
+        {
+            Dictionary<Player, float> allPlayerScores = new Dictionary<Player, float>();
+            List<Player> playersWithTopScore = new List<Player>();
+            float topScore;
 
-			// Iterates through each player to get all scores
-			for (int i = 0; i < Game.Players.Count; i++)
-			{
-				Player player = Game.Players[i];
-				allPlayerScores.Add(player, player.RoundScore);
-				player.TotalScore += player.RoundScore;
-			}
+            // Iterates through each player to get all scores
+            for (int i = 0; i < Game.Players.Count; i++)
+            {
+                Player player = Game.Players[i];
+                allPlayerScores.Add(player, player.RoundScore);
+                player.TotalScore += player.RoundScore;
+            }
 
-			// Sets the top score
-			topScore = allPlayerScores.Values.Max();
+            // Sets the top score
+            topScore = allPlayerScores.Values.Max();
 
-			// Iterates through each score to determine which players scored the highest
-			foreach (KeyValuePair<Player, float> kvp in allPlayerScores)
-			{
-				if (kvp.Value >= topScore) playersWithTopScore.Add(kvp.Key);
-			}
+            // Iterates through each score to determine which players scored the highest
+            foreach (KeyValuePair<Player, float> kvp in allPlayerScores)
+            {
+                if (kvp.Value >= topScore) playersWithTopScore.Add(kvp.Key);
+            }
 
-			return playersWithTopScore;
-		}
+            return playersWithTopScore;
+        }
     }
 }
