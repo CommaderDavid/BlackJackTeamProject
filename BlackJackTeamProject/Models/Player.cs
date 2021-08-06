@@ -7,6 +7,7 @@ namespace BlackJackTeamProject.Models
   {
     public string Name { get; set; }
     public float RoundScore { get; set; }
+	public float TotalScore { get; set; }
     public List<Card> Hand { get; set; }
 
     public Player(string name)

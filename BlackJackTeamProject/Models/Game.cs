@@ -15,6 +15,7 @@ namespace BlackJackTeamProject.Models
         // Deals out cards & sets active player
         public void StartGame()
         {
+			CurrentPlayerIndex = 0;
             CurrentPlayer = Players[CurrentPlayerIndex]; // Set player 1 as active
             Deck.Shuffle(); // Shuffle the deck
             Deal(); // Deal cards
@@ -99,19 +100,29 @@ namespace BlackJackTeamProject.Models
 
         public void EndGame()
         {
-            // TODO: End all turns (if not already)
-            // TODO: Show final results
-            // TODO: Allow starting new game
+			// TODO: Check for rounds remaining to see if new round can be made, otherwise determine overall winner
+			// TODO: (frontend) Show final results and a start new round button which calls StartGame()
+			GetRoundWinners();
+			CurrentPlayer = null; // No active player
         }
 
         // Changes play to next player's turn
         public void ChangePlayerTurn()
         {
             CurrentPlayerIndex += 1; // Increment index
-            CurrentPlayer = Players[CurrentPlayerIndex]; // Set current player
+
+			// If all players have played (when game is over)
+			if (CurrentPlayerIndex >= Players.Count)
+			{
+				CurrentPlayer = null;
+			}
+			else
+			{
+				CurrentPlayer = Players[CurrentPlayerIndex]; // Set current player
+			}
         }
 
-		public List<Player> GetWinners()
+		public List<Player> GetRoundWinners()
 		{
 			Dictionary<Player, float> allPlayerScores = new Dictionary<Player, float>();
 			List<Player> playersWithTopScore = new List<Player>();
@@ -122,6 +133,7 @@ namespace BlackJackTeamProject.Models
 			{
 				Player player = Game.Players[i];
 				allPlayerScores.Add(player, player.RoundScore);
+				player.TotalScore += player.RoundScore;
 			}
 
 			// Sets the top score
