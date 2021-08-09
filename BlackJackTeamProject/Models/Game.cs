@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -53,6 +54,28 @@ namespace BlackJackTeamProject.Models
             {
                 Bust();
             }
+
+			// CPU's automated turn
+			else if (CurrentPlayer.IsCPU)
+			{
+				Random rand = new Random();
+
+				// Handle difficulties
+				switch (CurrentPlayer.cpuDifficulty)
+				{
+					// Easy difficulty
+					case Player.CpuDifficulty.Easy:
+
+						if (CurrentPlayer.RoundScore >= 17)
+						{
+							// Pick random # between 0 and 10
+							if (rand.Next(0, 11) < 5) Hit();
+							else Hold();
+						}
+
+						break;
+				}
+			}
         }
 
         public void DealerHit()
@@ -120,6 +143,12 @@ namespace BlackJackTeamProject.Models
             else
             {
                 CurrentPlayer = Players[CurrentPlayerIndex]; // Set current player
+
+				// If CPU, take CPU's turn
+				if (CurrentPlayer.IsCPU)
+				{
+					Hit();
+				}
             }
         }
 
