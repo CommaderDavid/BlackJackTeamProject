@@ -30,10 +30,13 @@ namespace BlackJackTeamProject.Controllers
             return cards;
         }
 
-        [Route("/showactivehand")]
-        public List<Card> ShowActiveHand()
+        [Route("/getactivehand")]
+        public object GetActiveHand()
         {
-            return Game.CurrentPlayer.Hand;
+            return new {
+                hand = Game.CurrentPlayer.Hand,
+                index = Game.game.CurrentPlayerIndex
+            };
         }
 
         [HttpPost]
@@ -61,6 +64,7 @@ namespace BlackJackTeamProject.Controllers
         [Route("/makeplayer/{name}")]
         public void MakePlayer(string name)
         {
+            System.Console.WriteLine(name);
             Player player = new Player(name);
             Game.Players.Add(player);
         }

@@ -23,7 +23,7 @@ img:hover {
    border: green solid 5px;
 }
 
-#player{
+.player{
 
     width: 400px;
     font-size: 25px;
@@ -56,4 +56,8 @@ img:hover {
 #game {
     text-align: center;
     /* display: none; */
+}
+
+#formPlayer {
+    display: show
 }
