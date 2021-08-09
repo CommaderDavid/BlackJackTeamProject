@@ -21,8 +21,11 @@ function showHand() {
         results.json().then(data => {
             console.log(data);
             data.hand.forEach(function (h) {
-                console.log("<img src='~/img/Cards/card" + h.suit + h.rank.charAt(0) + ".png' alt='" + h.suit + h.rank.charAt(0) + "'" + ">");
-                $("#player" + (data.index + 1) + " " + "div")[0].append($("<img src='~/img/Cards/card" + h.suit + h.rank.charAt(0) + ".png' alt='" + h.suit + h.rank.charAt(0) + "'" + ">"));
+                let address = 'http://localhost:5000/img/Cards/card' + h.suit + h.rank.charAt(0) + '.png'
+                console.log(address);
+                let img = document.createElement('img');
+                img.src = address;
+                $("#player" + (data.index + 1) + " " + "div")[0].appendChild(img);
             });
         });
     });
