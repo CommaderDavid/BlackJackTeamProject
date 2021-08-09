@@ -30,10 +30,13 @@ namespace BlackJackTeamProject.Controllers
             return cards;
         }
 
-        [Route("/showactivehand")]
-        public List<Card> ShowActiveHand()
+        [Route("/getactivehand")]
+        public object GetActiveHand()
         {
-            return Game.CurrentPlayer.Hand;
+            return new {
+                hand = Game.CurrentPlayer.Hand,
+                index = Game.game.CurrentPlayerIndex
+            };
         }
 
         [HttpPost]

@@ -57,3 +57,7 @@ img:hover {
     text-align: center;
     /* display: none; */
 }
+
+#formPlayer {
+    display: show
+}
