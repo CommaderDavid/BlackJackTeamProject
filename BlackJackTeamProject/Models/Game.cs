@@ -16,6 +16,7 @@ namespace BlackJackTeamProject.Models
         public void StartGame()
         {
             CurrentPlayerIndex = 0;
+            System.Console.WriteLine("Player count: " + Players.Count);
             CurrentPlayer = Players[CurrentPlayerIndex]; // Set player 1 as active
             Deck.Shuffle(); // Shuffle the deck
             Deal(); // Deal cards

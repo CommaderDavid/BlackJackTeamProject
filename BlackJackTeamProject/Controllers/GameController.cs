@@ -61,6 +61,7 @@ namespace BlackJackTeamProject.Controllers
         [Route("/makeplayer/{name}")]
         public void MakePlayer(string name)
         {
+            System.Console.WriteLine(name);
             Player player = new Player(name);
             Game.Players.Add(player);
         }

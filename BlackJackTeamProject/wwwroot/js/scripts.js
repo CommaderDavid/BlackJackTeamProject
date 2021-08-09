@@ -19,4 +19,24 @@ $(document).ready(function () {
             }
         })
     });
+
+    $(".formPlayer").submit(function (e) {
+        e.preventDefault();
+        var playerInput = e.target.childNodes[1].value;
+        console.log(playerInput);
+        $(".name").text(playerInput);
+        $(".name").show();
+
+        e.preventDefault();
+        fetch('http://localhost:5000/makeplayer/' + playerInput, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'same-origin', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+    });
 });
