@@ -12,22 +12,22 @@ namespace BlackJackTeamProject.Models
 
         public static void BuildDeck()
         {
-            BuildUp("Spades", "black");
-            BuildUp("Diamonds", "red");
-            BuildUp("Hearts", "red");
-            BuildUp("Clubs", "black");
+            BuildUp("Spades");
+            BuildUp("Diamonds");
+            BuildUp("Hearts");
+            BuildUp("Clubs");
         }
 
-        private static void BuildUp(string suit, string color)
+        private static void BuildUp(string suit)
         {
             ranks.ForEach(
                 item =>
                 {
-                    Deck.deck.Add(new Card(suit, color, item));
+                    Deck.deck.Add(new Card(suit, item));
                 });
         }
 
-        public static void EmptyNewDeckAndDeck()
+        public static void EmptyDeck()
         {
 
             Deck.deck = new List<Card>();
@@ -45,7 +45,7 @@ namespace BlackJackTeamProject.Models
 
         public static void Shuffle()
         {
-            EmptyNewDeckAndDeck();
+            EmptyDeck();
             BuildDeck();
             ShuffleDeck();
         }

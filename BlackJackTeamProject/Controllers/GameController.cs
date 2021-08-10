@@ -33,10 +33,22 @@ namespace BlackJackTeamProject.Controllers
         [Route("/getactivehand")]
         public object GetActiveHand()
         {
-            return new {
-                hand = Game.CurrentPlayer.Hand,
-                index = Game.game.CurrentPlayerIndex
-            };
+            if (Game.CurrentPlayer == null)
+            {
+                return new
+                {
+                    hand = Game.Dealer.Hand,
+                    index = -1
+                };
+            }
+            else
+            {
+                return new
+                {
+                    hand = Game.CurrentPlayer.Hand,
+                    index = Game.game.CurrentPlayerIndex
+                };
+            }
         }
 
         [HttpPost]
@@ -47,17 +59,24 @@ namespace BlackJackTeamProject.Controllers
         }
 
         [HttpPost]
-        [Route("/hit/{name}")]
-        public void hit(string name)
+        [Route("/hit")]
+        public void hit()
         {
+            Game.game.Hit();
+        }
 
+        [HttpPost]
+        [Route("/dealerhit")]
+        public void dealerHit()
+        {
+            Game.game.DealerHit();
         }
 
         [HttpPost]
         [Route("/hold/")]
         public void hold()
         {
-
+            Game.game.ChangePlayerTurn();
         }
 
         [HttpPost]
