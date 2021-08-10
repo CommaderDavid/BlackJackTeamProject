@@ -11,15 +11,20 @@ namespace BlackJackTeamProject.Models
         public static Player CurrentPlayer { get; set; }
         public int CurrentPlayerIndex = 0;
 
-        public static Dealer Dealer { get; set; }
+        public static Dealer Dealer = new Dealer();
+
+        public bool HasRoundFinished { get; set; }
 
         // Deals out cards & sets active player
         public void StartGame()
         {
+            HasRoundFinished = false;
             CurrentPlayerIndex = 0;
             System.Console.WriteLine("Player count: " + Players.Count);
             CurrentPlayer = Players[CurrentPlayerIndex]; // Set player 1 as active
+            Dealer = new Dealer();
             Deck.Shuffle(); // Shuffle the deck
+           
             Deal(); // Deal cards
         }
 
@@ -47,6 +52,9 @@ namespace BlackJackTeamProject.Models
         {
             Card newCard = Deck.DealCard(); // Get new card
             CurrentPlayer.Hand.Add(newCard); // Add card to player's hand
+            System.Console.WriteLine("Player " + CurrentPlayer.Name + " got a " + newCard.Value);
+            System.Console.WriteLine("Player " + CurrentPlayer.Name + " now has " + CurrentPlayer.Hand.Count + " cards");
+            System.Console.WriteLine("Player " + CurrentPlayer.Name + " now has a score of " + CurrentPlayer.RoundScore);
             CurrentPlayer.RoundScore += newCard.Value; // Update player's score
 
             // Check for bust
@@ -55,33 +63,38 @@ namespace BlackJackTeamProject.Models
                 Bust();
             }
 
-			// CPU's automated turn
-			else if (CurrentPlayer.IsCPU)
-			{
-				Random rand = new Random();
+            // CPU's automated turn
+            else if (CurrentPlayer.IsCPU)
+            {
+                Random rand = new Random();
 
-				// Handle difficulties
-				switch (CurrentPlayer.cpuDifficulty)
-				{
-					// Easy difficulty
-					case Player.CpuDifficulty.Easy:
+                // Handle difficulties
+                switch (CurrentPlayer.cpuDifficulty)
+                {
+                    // Easy difficulty
+                    case Player.CpuDifficulty.Easy:
 
-						if (CurrentPlayer.RoundScore >= 17)
-						{
-							// Pick random # between 0 and 10
-							if (rand.Next(0, 11) < 5) Hit();
-							else Hold();
-						}
+                        if (CurrentPlayer.RoundScore >= 17)
+                        {
+                            // Pick random # between 0 and 10
+                            if (rand.Next(0, 11) < 5) Hit();
+                            else Hold();
+                        }
 
-						break;
-				}
-			}
+                        break;
+                }
+            }
         }
 
         public void DealerHit()
         {
+            if (HasRoundFinished) return;
+
             Card newCard = Deck.DealCard(); // Get new card
             Dealer.Hand.Add(newCard); // Add card to player's hand
+            Console.WriteLine("Dealer got a " + newCard.Value);
+            Console.WriteLine("Dealer now has " + Dealer.Hand.Count + " cards");
+            Console.WriteLine("Dealer now has a score of " + Dealer.RoundScore);
             if (newCard.Rank == "Ace")
             {
                 if (Dealer.RoundScore + 11 <= 21)
@@ -102,15 +115,18 @@ namespace BlackJackTeamProject.Models
             // Check for bust
             if (Dealer.RoundScore > 21)
             {
+                System.Console.WriteLine("Dealer score is 22+");
                 Bust(true);
+                EndGame();
+                return;
             }
 
             if (Dealer.RoundScore >= 17)
             {
+                System.Console.WriteLine("Dealer score is 17+");
                 EndGame();
+                return;
             }
-
-            DealerHit();
         }
 
         public void Bust(bool isDealer = false)
@@ -120,6 +136,10 @@ namespace BlackJackTeamProject.Models
                 CurrentPlayer.RoundScore = 0; // Reset player's score
                 ChangePlayerTurn();
             }
+            else
+            {
+                Dealer.RoundScore = 0; // Reset dealer's score
+            }
         }
 
         public void EndGame()
@@ -128,6 +148,7 @@ namespace BlackJackTeamProject.Models
             // TODO: (frontend) Show final results and a start new round button which calls StartGame()
             GetRoundWinners();
             CurrentPlayer = null; // No active player
+            HasRoundFinished = true;
         }
 
         // Changes play to next player's turn
@@ -139,16 +160,17 @@ namespace BlackJackTeamProject.Models
             if (CurrentPlayerIndex >= Players.Count)
             {
                 CurrentPlayer = null;
+                DealerHit();
             }
             else
             {
                 CurrentPlayer = Players[CurrentPlayerIndex]; // Set current player
 
-				// If CPU, take CPU's turn
-				if (CurrentPlayer.IsCPU)
-				{
-					Hit();
-				}
+                // If CPU, take CPU's turn
+                if (CurrentPlayer.IsCPU)
+                {
+                    Hit();
+                }
             }
         }
 
