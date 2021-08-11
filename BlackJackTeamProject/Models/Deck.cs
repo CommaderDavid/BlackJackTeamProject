@@ -51,7 +51,6 @@ namespace BlackJackTeamProject.Models
         }
         public static Card DealCard()
         {
-           
             Card card = Deck.deck[0];
             Deck.deck.RemoveAt(0);
             return card;
