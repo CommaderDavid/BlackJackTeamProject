@@ -48,9 +48,7 @@ function showAllHands() {
         }
     }).then(results => {
         results.json().then(data => {
-            console.log(data.gameState, "gammme stateafsdfdssdfa")
             if (data.gameState === "roundover") {
-                console.log("clearrreredddadfsfads");
                 clearInterval(clear);
             }
             console.log(clear, "clear");
@@ -115,10 +113,18 @@ function hitMe() {
     });
 }
 
+function createPlayerDivs(num) {
+    for (var i = 1; i <= num; i++) {
+        let div = '<div class="player" id="player' + i + '"><p> Name:</> <form class="formPlayer"> <input type="text" class="form - control" name="formSubmit"><br></form><div></div></div>'
+        $("#game").append(div);
+    }
+}
+
 $(document).ready(function () {
-    $('submit').click(function (e) {
+    $('#numberPlayers').submit(function (e) {
         e.preventDefault();
-        $("#first").toggle();
+        let numberPlayers = $('#players').val();
+        createPlayerDivs(numberPlayers);
         $("#game").toggle();
     })
 
@@ -154,7 +160,7 @@ $(document).ready(function () {
         // $(".formPlayer").hide();
 
 
-        fetch('http://localhost:5000/makeplayer/' + playerInput, {
+        fetch('http://localhost:5000/makeplayer/' + playerNumber, {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'same-origin', // no-cors, *cors, same-origin
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
