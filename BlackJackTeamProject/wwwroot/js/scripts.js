@@ -8,9 +8,11 @@
 
 let dealerIsRunning = false;
 var clear;
+let rndNumber = parseInt(Math.random() * 10000000);
+console.log(rndNumber);
 
 function hitDealer() {
-    fetch('http://localhost:5000/dealerhit', {
+    fetch('http://localhost:5000/dealerhit/' + rndNumber, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'same-origin', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -36,7 +38,7 @@ function startDealer() {
 
 
 function showAllHands() {
-    fetch('http://localhost:5000/getallhands', {
+    fetch('http://localhost:5000/getallhands/' + rndNumber, {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         mode: 'same-origin', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -85,7 +87,7 @@ function showAllHands() {
 }
 
 function stand() {
-    fetch('http://localhost:5000/hold', {
+    fetch('http://localhost:5000/hold/' + rndNumber, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'same-origin', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -98,7 +100,7 @@ function stand() {
 }
 
 function hitMe() {
-    fetch('http://localhost:5000/hit', {
+    fetch('http://localhost:5000/hit/' + rndNumber, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'same-origin', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -120,7 +122,7 @@ function createPlayerDivs(num) {
 }
 
 function createPlayers(playerNumber) {
-    fetch('http://localhost:5000/makeplayer/' + playerNumber, {
+    fetch('http://localhost:5000/makeplayer/' + playerNumber + "/" + rndNumber, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'same-origin', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -136,7 +138,7 @@ function createPlayers(playerNumber) {
 }
 
 function startGame() {
-    fetch('http://localhost:5000/start', {
+    fetch('http://localhost:5000/start/' + rndNumber, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'same-origin', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
