@@ -13,25 +13,27 @@ namespace BlackJackTeamProject.Controllers
         [Route("/")]
         public ActionResult Index()
         {
-            return View();
+            int Count = Game.games.Count;
+            return View(Count);
         }
 
         [HttpGet]
-        [Route("/getallhands")]
-        public object GetAllHands()
+        [Route("/getallhands/{id}")]
+        public object GetAllHands(int id)
         {
+            Game game = Game.games.Find(x => x.Id == id);
             string gameState = "";
-            if (Game.CurrentPlayer == null && Game.game.HasRoundFinished != true)
+            if (game.CurrentPlayer == null && game.HasRoundFinished != true)
             {
                 gameState = "dealer";
             }
-            else if (Game.game.HasRoundFinished)
+            else if (game.HasRoundFinished)
             {
                 gameState = "roundover";
                 System.Console.WriteLine("Round over");
             }
-            List<List<Card>> hands = Game.Players.Select(x => x.Hand).ToList();
-            hands.Add(Game.Dealer.Hand);
+            List<List<Card>> hands = game.Players.Select(x => x.Hand).ToList();
+            hands.Add(game.Dealer.Hand);
             return new
             {
                 hands = hands,
@@ -40,42 +42,50 @@ namespace BlackJackTeamProject.Controllers
         }
 
         [HttpPost]
-        [Route("/start")]
-        public void StartGame()
-        {
-            Game.game.StartGame();
-            System.Console.WriteLine(Game.Players.Count + " players joined");
+        [Route("/start/{id}")]
+        public void StartGame(int id)
+        {   
+            System.Console.WriteLine("Starting game " + id);
+            Game game = Game.games.Find(x => x.Id == id);
+            game.StartGame();
+            System.Console.WriteLine(game.Players.Count + " players joined");
         }
 
         [HttpPost]
-        [Route("/hit")]
-        public void hit()
+        [Route("/hit/{id}")]
+        public void hit(int id)
         {
-            Game.game.Hit();
+            Game game = Game.games.Find(x => x.Id == id);
+        	game.Hit();
         }
 
         [HttpPost]
-        [Route("/dealerhit")]
-        public void dealerHit()
+        [Route("/dealerhit/{id}")]
+        public void dealerHit(int id)
         {
-            Game.game.DealerHit();
+            Game game = Game.games.Find(x => x.Id == id);
+            game.DealerHit();
         }
 
         [HttpPost]
-        [Route("/hold/")]
-        public void hold()
+        [Route("/hold/{id}")]
+        public void hold(int id)
         {
-            Game.game.ChangePlayerTurn();
+			Game game = Game.games.Find(x => x.Id == id);
+            game.ChangePlayerTurn();
         }
 
         [HttpPost]
-        [Route("/makeplayer/{number}")]
-        public void MakePlayer(int number)
+        [Route("/makeplayer/{number}/{id}")]
+        public void MakePlayer(int number,int id)
         {
+            System.Console.WriteLine("Making game " + number + " for game " + id);
+            Game game = new Game(id);
+            Game.games.Add(game);
             for(int i = 0; i < number; i++)
             {
                 Player player = new Player();
-                Game.Players.Add(player);
+                game.Players.Add(player);
             }
                
         }

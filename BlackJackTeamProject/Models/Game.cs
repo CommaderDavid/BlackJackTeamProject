@@ -6,12 +6,13 @@ namespace BlackJackTeamProject.Models
 {
     public class Game
     {
-        public static Game game = new Game();
-        public static List<Player> Players = new List<Player>();
-        public static Player CurrentPlayer { get; set; }
+        public int Id { get; set; }
+        public static List<Game> games = new List<Game>();
+        public List<Player> Players = new List<Player>();
+        public Player CurrentPlayer { get; set; }
         public int CurrentPlayerIndex = 0;
 
-        public static Dealer Dealer = new Dealer();
+        public Dealer Dealer = new Dealer();
 
         public bool HasRoundFinished { get; set; }
 
@@ -20,6 +21,10 @@ namespace BlackJackTeamProject.Models
 		public int TotalBet { get; set; }
 
         // Deals out cards & sets active player
+
+        public Game(int id){
+            Id = id;
+        }
         public void StartGame()
         {
             HasRoundFinished = false;
@@ -197,9 +202,9 @@ namespace BlackJackTeamProject.Models
 			int totalBet = 0;
 
             // Iterates through each player to get all scores
-            for (int i = 0; i < Game.Players.Count; i++)
+            for (int i = 0; i < Players.Count; i++)
             {
-                Player player = Game.Players[i];
+                Player player = Players[i];
                 allPlayerScores.Add(player, player.RoundScore);
 				totalBet += player.BetAmount;
             }
