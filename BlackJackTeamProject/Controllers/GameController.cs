@@ -44,6 +44,7 @@ namespace BlackJackTeamProject.Controllers
         public void StartGame()
         {
             Game.game.StartGame();
+            System.Console.WriteLine(Game.Players.Count + " players joined");
         }
 
         [HttpPost]

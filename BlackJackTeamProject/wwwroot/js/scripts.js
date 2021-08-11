@@ -31,7 +31,6 @@ function startDealer() {
             hitDealer();
         }, 1000);
     }
-
     // create interval which calls dealer hit
 }
 
@@ -115,32 +114,52 @@ function hitMe() {
 
 function createPlayerDivs(num) {
     for (var i = 1; i <= num; i++) {
-        let div = '<div class="player" id="player' + i + '"><p> Name:</> <form class="formPlayer"> <input type="text" class="form - control" name="formSubmit"><br></form><div></div></div>'
+        let div = '<div class="player" id="player' + i + '"><div></div></div>'
         $("#game").append(div);
     }
 }
 
+function createPlayers(playerNumber) {
+    fetch('http://localhost:5000/makeplayer/' + playerNumber, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'same-origin', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+        }
+    }).then(x => {
+        createPlayerDivs(playerNumber);
+        startGame()
+    })
+}
+
+function startGame() {
+    fetch('http://localhost:5000/start', {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'same-origin', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+        }
+    }).then(x => { showAllHands(); });
+}
+
+
 $(document).ready(function () {
+    $("#game").toggle();
+
     $('#numberPlayers').submit(function (e) {
         e.preventDefault();
         let numberPlayers = $('#players').val();
-        createPlayerDivs(numberPlayers);
+        createPlayers(numberPlayers);
+
         $("#game").toggle();
     })
 
-    $('#StartButton').click(function (e) {
-        e.preventDefault();
-        fetch('http://localhost:5000/start', {
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            mode: 'same-origin', // no-cors, *cors, same-origin
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, *same-origin, omit
-            headers: {
-                'Content-Type': 'application/json'
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-            }
-        }).then(x => { showAllHands(); });
-    })
 
     $('#HitButton').click(function (e) {
         e.preventDefault();
@@ -152,25 +171,6 @@ $(document).ready(function () {
         stand();
     });
 
-    $(".formPlayer").submit(function (e) {
-        e.preventDefault();
-        var playerInput = e.target.childNodes[1].value;
-        console.log(playerInput);
-        // $(".name").text(playerInput);
-        // $(".formPlayer").hide();
-
-
-        fetch('http://localhost:5000/makeplayer/' + playerNumber, {
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            mode: 'same-origin', // no-cors, *cors, same-origin
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, *same-origin, omit
-            headers: {
-                'Content-Type': 'application/json'
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-            }
-        })
-    });
 });
 
 
