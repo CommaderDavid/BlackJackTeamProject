@@ -19,6 +19,7 @@ namespace BlackJackTeamProject.Models
         public List<Card> Hand = new List<Card>();
 		public bool IsCPU { get; set; }
 		public CpuDifficulty cpuDifficulty { get; set; }
+        public int Bet { get; set; }
 
         public Player(string name)
         {

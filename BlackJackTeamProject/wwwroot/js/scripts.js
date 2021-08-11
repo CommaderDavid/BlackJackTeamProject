@@ -116,6 +116,12 @@ function hitMe() {
 }
 
 $(document).ready(function () {
+    $('submit').click(function (e) {
+        e.preventDefault();
+        $("#first").toggle();
+        $("#game").toggle();
+    })
+
     $('#StartButton').click(function (e) {
         e.preventDefault();
         fetch('http://localhost:5000/start', {
