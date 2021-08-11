@@ -63,21 +63,17 @@ This project uses the following technologies:
 
 ## 🔧 Setup & Requirements
 
-### 📋 Necessary Specifications
-
 #### To run this project locally you will need:
 
 - **ASP .NET Core :** You can check if you have .NET Core by running `dotnet --version` in the command line. If you do not have .NET Core please find more information and download [here](https://dotnet.microsoft.com/download/dotnet-core)
-- **MySQL :**  You can download MySQL [here](https://dev.mysql.com/downloads/file/?id=484914) and MySQL Workbench [here](https://dev.mysql.com/downloads/file/?id=484391)
-- **Prefered Code Editor**
-
+- **JQuery :**  
 #### To Download:
 
-Go to my GitHub repository here, [https://guthub.com/AndrewMMickel/Factory](https://guthub.com/AndrewMMickel/Factory), and click on the green 'Code' button to clone the repository, Open with GitHub Desktop OR Download the ZIP file
+Go to my GitHub repository here, [https://github.com/CommaderDavid/BlackJackTeamProject](https://github.com/CommaderDavid/BlackJackTeamProject), and click on the green 'Code' button to clone the repository, Open with GitHub Desktop OR Download the ZIP file
 
 #### Running/viewing application:
 
-1. Once you have opened the code in your preferred text editor you will need to navigate to the 'Factory.Solution/Factory' folder (`cd Factory`) in the command line and run `dotnet run` or `dotnet watch run`.
+1. Once you have opened the code in your preferred text editor you will need to navigate to the 'BlackJackTeamProject/BlackJackTeamProject' folder (`cd BlackJackTeamProject`) in the command line and run `dotnet run` or `dotnet watch run`.
 2. At this point you should be able to click on the link to the local server's url path to view the compiled project. 
 
 --------------------------
