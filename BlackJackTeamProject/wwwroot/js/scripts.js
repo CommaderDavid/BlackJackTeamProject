@@ -58,7 +58,11 @@ function showAllHands() {
             console.log(data, "data");
             dealer = data.hands.splice(-1);
             dealer[0].forEach(function (c) {
-                let address = 'http://localhost:5000/img/Cards/card' + c.suit + c.rank.charAt(0) + '.png'
+                let char = c.rank.charAt(0);
+                if (char === '1') {
+                    char = 10;
+                }
+                let address = 'http://localhost:5000/img/Cards/card' + c.suit + char + '.png'
                 let img = document.createElement('img');
                 img.src = address;
                 img.style.width = '100px';
@@ -68,7 +72,11 @@ function showAllHands() {
             data.hands.forEach(function (h) {
                 index++;
                 h.forEach(function (c) {
-                    let address = 'http://localhost:5000/img/Cards/card' + c.suit + c.rank.charAt(0) + '.png'
+                    let char = c.rank.charAt(0);
+                    if (char === '1') {
+                        char = 10;
+                    }
+                    let address = 'http://localhost:5000/img/Cards/card' + c.suit + char + '.png'
                     let img = document.createElement('img');
                     img.src = address;
                     img.style.width = '100px';
