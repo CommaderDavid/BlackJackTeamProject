@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using BlackJackTeamProject.Models;
+using System.Linq;
 namespace BlackJackTeamProject.Controllers
 {
     public class GameController : Controller
@@ -15,40 +16,27 @@ namespace BlackJackTeamProject.Controllers
             return View();
         }
 
-        // GET: Home
         [HttpGet]
-        [Route("/showhand/{name}")]
-        public List<Card> ShowHandByName(string name)
+        [Route("/getallhands")]
+        public object GetAllHands()
         {
-            if (name == "dealer")
+            string gameState = "";
+            if (Game.CurrentPlayer == null && Game.game.HasRoundFinished != true)
             {
-
+                gameState = "dealer";
             }
-            List<Player> players = Game.Players;
-            Player player = players.Find(x => x.Name == name);
-            List<Card> cards = player.Hand;
-            return cards;
-        }
-
-        [Route("/getactivehand")]
-        public object GetActiveHand()
-        {
-            if (Game.CurrentPlayer == null)
+            else if (Game.game.HasRoundFinished)
             {
-                return new
-                {
-                    hand = Game.Dealer.Hand,
-                    index = -1
-                };
+                gameState = "roundover";
+                System.Console.WriteLine("Round over");
             }
-            else
+            List<List<Card>> hands = Game.Players.Select(x => x.Hand).ToList();
+            hands.Add(Game.Dealer.Hand);
+            return new
             {
-                return new
-                {
-                    hand = Game.CurrentPlayer.Hand,
-                    index = Game.game.CurrentPlayerIndex
-                };
-            }
+                hands = hands,
+                gameState = gameState
+            };
         }
 
         [HttpPost]

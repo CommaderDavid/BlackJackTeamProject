@@ -7,6 +7,7 @@
 // });
 
 let dealerIsRunning = false;
+var clear;
 
 function hitDealer() {
     fetch('http://localhost:5000/dealerhit', {
@@ -19,21 +20,24 @@ function hitDealer() {
             // 'Content-Type': 'application/x-www-form-urlencoded',
         }
     }).then(results => {
-        showHand();
+        showAllHands();
     });
-
 }
-
 
 function startDealer() {
+
+    if (clear === undefined) {
+        clear = setInterval(function () {
+            hitDealer();
+        }, 1000);
+    }
+
     // create interval which calls dealer hit
-    setInterval(function () {
-        hitDealer();
-    }, 1000);
 }
 
-function showHand() {
-    fetch('http://localhost:5000/getactivehand', {
+
+function showAllHands() {
+    fetch('http://localhost:5000/getallhands', {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         mode: 'same-origin', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -44,33 +48,42 @@ function showHand() {
         }
     }).then(results => {
         results.json().then(data => {
-            if (data.index === -1) {
-                if (dealerIsRunning === false) {
-                    startDealer();
-                    dealerIsRunning = true;
-                }
-                $("#dealer" + " " + "div").empty();
-                data.hand.forEach(function (h) {
-                    let address = 'http://localhost:5000/img/Cards/card' + h.suit + h.rank.charAt(0) + '.png'
-                    console.log(address);
+            console.log(data.gameState, "gammme stateafsdfdssdfa")
+            if (data.gameState === "roundover") {
+                console.log("clearrreredddadfsfads");
+                clearInterval(clear);
+            }
+            console.log(clear, "clear");
+            $(".player" + " " + "div").empty();
+            $("#dealer" + " " + "div").empty();
+            console.log(data, "data");
+            dealer = data.hands.splice(-1);
+            dealer[0].forEach(function (c) {
+                let address = 'http://localhost:5000/img/Cards/card' + c.suit + c.rank.charAt(0) + '.png'
+                let img = document.createElement('img');
+                img.src = address;
+                img.style.width = '100px';
+                $("#dealer" + " " + "div")[0].appendChild(img);
+            });
+            let index = 0;
+            data.hands.forEach(function (h) {
+                index++;
+                h.forEach(function (c) {
+                    let address = 'http://localhost:5000/img/Cards/card' + c.suit + c.rank.charAt(0) + '.png'
                     let img = document.createElement('img');
                     img.src = address;
                     img.style.width = '100px';
-                    $("#dealer" + " " + "div")[0].appendChild(img);
+                    $("#player" + (index) + " " + "div")[0].appendChild(img);
                 });
+            });
+            if (data.gameState === "dealer" && dealerIsRunning === false) {
+                dealerIsRunning = true;
+                startDealer();
             }
-            else {
-                $("#player" + (data.index + 1) + " " + "div").empty();
-                data.hand.forEach(function (h) {
-                    let address = 'http://localhost:5000/img/Cards/card' + h.suit + h.rank.charAt(0) + '.png'
-                    console.log(address);
-                    let img = document.createElement('img');
-                    img.src = address;
-                    img.style.width = '100px';
-                    $("#player" + (data.index + 1) + " " + "div")[0].appendChild(img);
-                });
-            }
-        });
+
+        }
+
+        );
     });
 }
 
@@ -84,13 +97,8 @@ function stand() {
             'Content-Type': 'application/json'
             // 'Content-Type': 'application/x-www-form-urlencoded',
         }
-    }).then(results => {
-        showHand();
-    });
+    }).then(x => { showAllHands(); });
 }
-
-
-
 
 function hitMe() {
     fetch('http://localhost:5000/hit', {
@@ -103,9 +111,8 @@ function hitMe() {
             // 'Content-Type': 'application/x-www-form-urlencoded',
         }
     }).then(results => {
-        showHand();
+        showAllHands();
     });
-
 }
 
 $(document).ready(function () {
@@ -120,7 +127,7 @@ $(document).ready(function () {
                 'Content-Type': 'application/json'
                 // 'Content-Type': 'application/x-www-form-urlencoded',
             }
-        }).then(x => { showHand(); });
+        }).then(x => { showAllHands(); });
     })
 
     $('#HitButton').click(function (e) {
