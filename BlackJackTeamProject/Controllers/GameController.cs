@@ -21,13 +21,14 @@ namespace BlackJackTeamProject.Controllers
         public object GetAllHands()
         {
             string gameState = "";
-            if (Game.CurrentPlayer == null)
+            if (Game.CurrentPlayer == null && Game.game.HasRoundFinished != true)
             {
                 gameState = "dealer";
             }
             else if (Game.game.HasRoundFinished)
             {
                 gameState = "roundover";
+                System.Console.WriteLine("Round over");
             }
             List<List<Card>> hands = Game.Players.Select(x => x.Hand).ToList();
             hands.Add(Game.Dealer.Hand);

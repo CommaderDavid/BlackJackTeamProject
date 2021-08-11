@@ -7,6 +7,7 @@
 // });
 
 let dealerIsRunning = false;
+var clear;
 
 function hitDealer() {
     fetch('http://localhost:5000/dealerhit', {
@@ -23,18 +24,17 @@ function hitDealer() {
     });
 }
 
-function startDealer(end) {
-    let clear;
-    if (!end) {
+function startDealer() {
+
+    if (clear === undefined) {
         clear = setInterval(function () {
             hitDealer();
         }, 1000);
     }
-    else if (end) {
-        clearInterval(clear);
-    }
+
     // create interval which calls dealer hit
 }
+
 
 function showAllHands() {
     fetch('http://localhost:5000/getallhands', {
@@ -48,7 +48,12 @@ function showAllHands() {
         }
     }).then(results => {
         results.json().then(data => {
-
+            console.log(data.gameState, "gammme stateafsdfdssdfa")
+            if (data.gameState === "roundover") {
+                console.log("clearrreredddadfsfads");
+                clearInterval(clear);
+            }
+            console.log(clear, "clear");
             $(".player" + " " + "div").empty();
             $("#dealer" + " " + "div").empty();
             console.log(data, "data");
@@ -71,12 +76,11 @@ function showAllHands() {
                     $("#player" + (index) + " " + "div")[0].appendChild(img);
                 });
             });
-            if (data.gameState == "dealer" && !dealerIsRunning) {
-                startDealer(false);
+            if (data.gameState === "dealer" && dealerIsRunning === false) {
+                dealerIsRunning = true;
+                startDealer();
             }
-            else if (data.gameState == "roundOver") {
-                startDealer(true);
-            }
+
         }
 
         );
