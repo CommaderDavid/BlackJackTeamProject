@@ -24,7 +24,7 @@ namespace BlackJackTeamProject.Models
             CurrentPlayer = Players[CurrentPlayerIndex]; // Set player 1 as active
             Dealer = new Dealer();
             Deck.Shuffle(); // Shuffle the deck
-           
+
             Deal(); // Deal cards
         }
 
