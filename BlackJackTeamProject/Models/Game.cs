@@ -15,6 +15,8 @@ namespace BlackJackTeamProject.Models
 
         public bool HasRoundFinished { get; set; }
 
+        public int NumberPlayers { get; set; }
+
         // Deals out cards & sets active player
         public void StartGame()
         {
