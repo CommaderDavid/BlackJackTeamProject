@@ -44,6 +44,7 @@ namespace BlackJackTeamProject.Controllers
         public void StartGame()
         {
             Game.game.StartGame();
+            System.Console.WriteLine(Game.Players.Count + " players joined");
         }
 
         [HttpPost]
@@ -68,12 +69,15 @@ namespace BlackJackTeamProject.Controllers
         }
 
         [HttpPost]
-        [Route("/makeplayer/{name}")]
-        public void MakePlayer(string name)
+        [Route("/makeplayer/{number}")]
+        public void MakePlayer(int number)
         {
-            System.Console.WriteLine(name);
-            Player player = new Player(name);
-            Game.Players.Add(player);
+            for(int i = 0; i < number; i++)
+            {
+                Player player = new Player();
+                Game.Players.Add(player);
+            }
+               
         }
     }
 }

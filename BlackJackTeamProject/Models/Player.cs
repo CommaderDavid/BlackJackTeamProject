@@ -21,9 +21,8 @@ namespace BlackJackTeamProject.Models
         public int BetAmount { get; set; }
 		public float TotalWinnings { get; set; }
 
-        public Player(string name)
+        public Player()
         {
-            Name = name;
             RoundScore = 0;
 			cpuDifficulty = CpuDifficulty.Easy;
         }
