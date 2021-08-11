@@ -15,11 +15,11 @@ namespace BlackJackTeamProject.Models
 
         public string Name { get; set; }
         public float RoundScore { get; set; }
-        public float TotalScore { get; set; }
         public List<Card> Hand = new List<Card>();
 		public bool IsCPU { get; set; }
 		public CpuDifficulty cpuDifficulty { get; set; }
-        public int Bet { get; set; }
+        public int BetAmount { get; set; }
+		public float TotalWinnings { get; set; }
 
         public Player(string name)
         {
