@@ -5,6 +5,7 @@ namespace BlackJackTeamProject.Models
 {
     public class Player
     {
+        public int Id;
 		public enum CpuDifficulty
 		{
 			Easy,
@@ -13,17 +14,17 @@ namespace BlackJackTeamProject.Models
 			Impossible
 		}
 
-        public string Name { get; set; }
-        public float RoundScore { get; set; }
+        public int HandScore { get; set; }
         public List<Card> Hand = new List<Card>();
 		public bool IsCPU { get; set; }
 		public CpuDifficulty cpuDifficulty { get; set; }
-        public int BetAmount { get; set; }
-		public float TotalWinnings { get; set; }
+        // public int BetAmount { get; set; }
+		// public float TotalWinnings { get; set; }
 
-        public Player()
+        public Player(int id)
         {
-            RoundScore = 0;
+            Id = id;
+            HandScore = 0;
 			cpuDifficulty = CpuDifficulty.Easy;
         }
 
@@ -33,9 +34,9 @@ namespace BlackJackTeamProject.Models
 
             foreach (Card ace in aces)
             {
-                if (RoundScore + 10 <= 21)
+                if (HandScore + 10 <= 21)
                 {
-                    RoundScore += 10;
+                    HandScore += 10;
                 }
             }
         }
