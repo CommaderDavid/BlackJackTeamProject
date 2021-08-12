@@ -5,7 +5,7 @@
 
 <p align = "center">
 This application allows the user play a game of BlackJack with up to four players against an AI operated dealer </p>
-<p align = "center"> Created May 20th, 2021 </p>
+<p align = "center"> Created July 30th, 2021 </p>
 
 <p align = "center">
  By Matthew, David, Chris, and Andrew
@@ -38,7 +38,7 @@ This project uses the following technologies:
 
 | Gameplay function | Input | Output |
 | :------------- | :------------- | :------------- |
-| Multiplayer: there are up to 4 players that can be played at once. | Select the amount of players you want and hit start | the players will be given cards |
+| Multiplayer: multiple players can play in the same instance | choose the amount of players you ewant from the dropdown menu | the players will be given cards and the game will start |
 | Cards: hovering over the cards with your mouse will highlight the card to make it easier to read |  |  |
 | Dealer: the AI player in the game | hit the "Stand" button to let the AI make it's play | It will pull cards until the cards reach a value of 17+ points |
 | Betting: The player can bet a certain amount of chips on their current hand to |  |  |
@@ -53,7 +53,7 @@ This project uses the following technologies:
 
 | Error | Handled | Solution |
 | :------------- | :------------- | :------------- |
-|  |  | 
+| Rounds are not working yet and the game stops working after one round |  | 
 |  |  | 
 |  |  | 
 |  |  | 
