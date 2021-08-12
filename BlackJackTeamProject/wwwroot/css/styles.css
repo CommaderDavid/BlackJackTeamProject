@@ -23,7 +23,11 @@ img:hover {
    border: green solid 5px;
 }
 
-.player{
+.active {
+    border: red solid 5px;
+}
+
+#Player{
 
     width: 400px;
     font-size: 25px;
@@ -40,8 +44,6 @@ img:hover {
     border: 5px solid black;
     display: block;
 }
-
-
 
 .dealers_cards, .players_cards{
     /*width: 600px;*/

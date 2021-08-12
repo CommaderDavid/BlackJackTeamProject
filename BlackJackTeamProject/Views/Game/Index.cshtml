@@ -3,9 +3,6 @@
 }
 @using BlackJackTeamProject.Models;
 
-<div id={"first gameId" + Game.games.Count}>
-    <h1>Welcome to Blackjack</h1>
-</div>
 <div id="first">
     <h1>Welcome to Blackjack</h1>
     <br>
@@ -18,8 +15,8 @@
             <option value="4">4</option>
         </select>
         <br>
-        <label for="rounds">Choose number of rounds:</label>
-        <input type="number">
+        <label for="numberRounds">Choose number of rounds:</label>
+        <input type="number" name="numberRounds" id="numberRounds" required>
         <br>
         <button type="submit">Start!</button>
     </form>
@@ -32,55 +29,14 @@
         <div>
         </div>
     </div>
+    <div id="players">
 
-    @*
-        <div class="player" id="player1">
-        <p>Name:
-        <script>$(".name").text(playerInput)</script>
-        </p>
-        <form class="formPlayer">
-
-        <input type="text" class="form-control" name="formSubmit"><br>
-        </form>
-        <div></div>
-        </div>
-
-        <div class="player" id="player2">
-        Name:
-        <form class="formPlayer">
-
-        <input type="text" class="form-control"><br>
-        <!-- <input type="submit" value="Submit"> -->
-        </form>
-        <div></div>
-        </div>
-
-        <div class="player" id="player3">
-        Name:
-        <form class="formPlayer">
-
-        <input type="text" class="form-control"><br>
-        <!-- <input type="submit" value="Submit"> -->
-        </form>
-        <div></div>
-
-        </div>
-
-        <div class="player" id="player4">
-        Name:
-        <form id="formPlayer">
-
-        <input type="text" class="form-control"><br>
-        <!-- <input type="submit" value="Submit"> -->
-        </form>
-        <div></div>
-        </div> *@
+    </div>
 
     <div id="interface">
         <button class="switch" id="HitButton">Hit me</button>
         <button class="submit" id="StandButton">Stand</button>
-        <p>How much you betting? <input class="number"></button></p>
-        <button class="submit">End game</button>
+        <p><button class="submit" id="newroundButton">Next Round</button><span id="rounds">We are on round __ of __</span> </p>
     </div>
 
 

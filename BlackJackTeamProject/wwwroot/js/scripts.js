@@ -36,6 +36,17 @@ function startDealer() {
     // create interval which calls dealer hit
 }
 
+function showActive(currentPlayer) {
+    let highlightId = currentPlayer + 1;
+    $(".player").css("border", "none");
+    $("#player" + highlightId).css("border", "solid red 3px");
+}
+
+function showRounds(currentRound, totalRounds) {
+    let sentence = "Round " + currentRound + " of " + totalRounds;
+    $("#rounds").html(sentence);
+}
+
 
 function showAllHands() {
     fetch('http://localhost:5000/getallhands/' + rndNumber, {
@@ -49,8 +60,11 @@ function showAllHands() {
         }
     }).then(results => {
         results.json().then(data => {
+            showRounds(data.currentRound, data.totalRounds);
+            showActive(data.currentPlayer);
             if (data.gameState === "roundover") {
                 clearInterval(clear);
+                clear = undefined;
             }
             console.log(clear, "clear");
             $(".player" + " " + "div").empty();
@@ -130,7 +144,9 @@ function createPlayerDivs(num) {
 }
 
 function createPlayers(playerNumber) {
-    fetch('http://localhost:5000/makeplayer/' + playerNumber + "/" + rndNumber, {
+    //get value from form
+    let rounds = $("#numberRounds").val();
+    fetch('http://localhost:5000/makeplayer/' + playerNumber + "/" + rndNumber + "/" + rounds, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'same-origin', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -161,6 +177,12 @@ function startGame() {
 
 $(document).ready(function () {
     $("#game").toggle();
+
+    $("#newroundButton").click(function (e) {
+        e.preventDefault();
+        console.log("adslkfjasd;fa");
+        startGame();
+    })
 
     $('#numberPlayers').submit(function (e) {
         e.preventDefault();

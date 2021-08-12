@@ -37,14 +37,17 @@ namespace BlackJackTeamProject.Controllers
             return new
             {
                 hands = hands,
-                gameState = gameState
+                gameState = gameState,
+                currentPlayer = (game.CurrentPlayer != null) ? game.CurrentPlayer.Id : -1,
+                currentRound = game.CurrentRound,
+                totalRounds = game.TotalRounds,
             };
         }
 
         [HttpPost]
         [Route("/start/{id}")]
         public void StartGame(int id)
-        {   
+        {
             System.Console.WriteLine("Starting game " + id);
             Game game = Game.games.Find(x => x.Id == id);
             game.StartGame();
@@ -56,7 +59,7 @@ namespace BlackJackTeamProject.Controllers
         public void hit(int id)
         {
             Game game = Game.games.Find(x => x.Id == id);
-        	game.Hit();
+            game.Hit();
         }
 
         [HttpPost]
@@ -71,23 +74,22 @@ namespace BlackJackTeamProject.Controllers
         [Route("/hold/{id}")]
         public void hold(int id)
         {
-			Game game = Game.games.Find(x => x.Id == id);
+            Game game = Game.games.Find(x => x.Id == id);
             game.ChangePlayerTurn();
         }
 
         [HttpPost]
-        [Route("/makeplayer/{number}/{id}")]
-        public void MakePlayer(int number,int id)
+        [Route("/makeplayer/{number}/{id}/{rounds}")]
+        public void MakePlayer(int number, int id, int rounds)
         {
             System.Console.WriteLine("Making game " + number + " for game " + id);
-            Game game = new Game(id);
+            Game game = new Game(id, rounds);
             Game.games.Add(game);
-            for(int i = 0; i < number; i++)
+            for (int i = 0; i < number; i++)
             {
-                Player player = new Player();
+                Player player = new Player(i);
                 game.Players.Add(player);
             }
-               
         }
     }
 }

@@ -14,29 +14,42 @@ namespace BlackJackTeamProject.Models
 
         public Dealer Dealer = new Dealer();
 
+        public int CurrentRound = 0;
+        public int TotalRounds { get; set; }
         public bool HasRoundFinished { get; set; }
 
         public int NumberPlayers { get; set; }
 
-		public int TotalBet { get; set; }
+        // public int TotalBet { get; set; }
 
         // Deals out cards & sets active player
 
-        public Game(int id){
+        public Game(int id, int totalRounds)
+        {
             Id = id;
+            TotalRounds = totalRounds;
         }
+
+        public void ResetPlayers()
+        {
+            Players.ForEach(x => x.Hand = new List<Card>());
+            Players.ForEach(x => x.HandScore = 0);
+        }
+
         public void StartGame()
         {
+            CurrentRound++;
             HasRoundFinished = false;
+            ResetPlayers();
             CurrentPlayerIndex = 0;
             System.Console.WriteLine("Player count: " + Players.Count);
             CurrentPlayer = Players[CurrentPlayerIndex]; // Set player 1 as active
 
-			// Set up bet
-			for (int i = 0; i < Players.Count; i++)
-			{
-				TotalBet += Players[i].BetAmount;
-			}
+            // Set up bet
+            // for (int i = 0; i < Players.Count; i++)
+            // {
+            //     TotalBet += Players[i].BetAmount;
+            // }
 
             Dealer = new Dealer();
             Deck.Shuffle(); // Shuffle the deck
@@ -53,7 +66,7 @@ namespace BlackJackTeamProject.Models
                 {
                     Card newCard = Deck.DealCard(); // Get new card
                     player.Hand.Add(newCard); // Add card to player's hand
-                    player.RoundScore += newCard.Value; // Update player's score
+                    player.HandScore += newCard.Value; // Update player's score
                 }
             }
         }
@@ -68,13 +81,13 @@ namespace BlackJackTeamProject.Models
         {
             Card newCard = Deck.DealCard(); // Get new card
             CurrentPlayer.Hand.Add(newCard); // Add card to player's hand
-            System.Console.WriteLine("Player " + CurrentPlayer.Name + " got a " + newCard.Value);
-            System.Console.WriteLine("Player " + CurrentPlayer.Name + " now has " + CurrentPlayer.Hand.Count + " cards");
-            System.Console.WriteLine("Player " + CurrentPlayer.Name + " now has a score of " + CurrentPlayer.RoundScore);
-            CurrentPlayer.RoundScore += newCard.Value; // Update player's score
+            CurrentPlayer.HandScore += newCard.Value; // Update player's score
+            System.Console.WriteLine("Player " + CurrentPlayer.Id + " got a " + newCard.Value);
+            System.Console.WriteLine("Player " + CurrentPlayer.Id + " now has " + CurrentPlayer.Hand.Count + " cards");
+            System.Console.WriteLine("Player " + CurrentPlayer.Id + " now has a score of " + CurrentPlayer.HandScore);
 
             // Check for bust
-            if (CurrentPlayer.RoundScore > 21)
+            if (CurrentPlayer.HandScore > 21)
             {
                 Bust();
             }
@@ -90,7 +103,7 @@ namespace BlackJackTeamProject.Models
                     // Easy difficulty
                     case Player.CpuDifficulty.Easy:
 
-                        if (CurrentPlayer.RoundScore >= 17)
+                        if (CurrentPlayer.HandScore >= 17)
                         {
                             // Pick random # between 0 and 10
                             if (rand.Next(0, 11) < 5) Hit();
@@ -104,32 +117,33 @@ namespace BlackJackTeamProject.Models
 
         public void DealerHit()
         {
-            if (HasRoundFinished) return;
+           // if (HasRoundFinished) return;
 
             Card newCard = Deck.DealCard(); // Get new card
             Dealer.Hand.Add(newCard); // Add card to player's hand
             Console.WriteLine("Dealer got a " + newCard.Value);
             Console.WriteLine("Dealer now has " + Dealer.Hand.Count + " cards");
-            Console.WriteLine("Dealer now has a score of " + Dealer.RoundScore);
             if (newCard.Rank == "Ace")
             {
-                if (Dealer.RoundScore + 11 <= 21)
+                if (Dealer.HandScore + 11 <= 21)
                 {
-                    Dealer.RoundScore += 11; // Update player's score
+                    Dealer.HandScore += 11; // Update player's score
                 }
                 else
                 {
-                    Dealer.RoundScore += 1; // Update player's score
+                    Dealer.HandScore += 1; // Update player's score
                 }
             }
             else
             {
-                Dealer.RoundScore += newCard.Value; // Update player's score
+                Dealer.HandScore += newCard.Value; // Update player's score
             }
+
+            Console.WriteLine("Dealer now has a score of " + Dealer.HandScore);
 
 
             // Check for bust
-            if (Dealer.RoundScore > 21)
+            if (Dealer.HandScore > 21)
             {
                 System.Console.WriteLine("Dealer score is 22+");
                 Bust(true);
@@ -137,7 +151,7 @@ namespace BlackJackTeamProject.Models
                 return;
             }
 
-            if (Dealer.RoundScore >= 17)
+            if (Dealer.HandScore >= 17)
             {
                 System.Console.WriteLine("Dealer score is 17+");
                 EndGame();
@@ -149,24 +163,24 @@ namespace BlackJackTeamProject.Models
         {
             if (!isDealer)
             {
-                CurrentPlayer.RoundScore = 0; // Reset player's score
+                CurrentPlayer.HandScore = 0; // Reset player's score
                 ChangePlayerTurn();
             }
             else
             {
-                Dealer.RoundScore = 0; // Reset dealer's score
+                Dealer.HandScore = 0; // Reset dealer's score
             }
         }
 
         public void EndGame()
         {
-			// Hand out winnings for round
+            // Hand out winnings for round
             List<Player> winners = GetRoundWinners();
 
-			// If not tie
-			if (winners.Count == 1) winners[0].TotalWinnings += TotalBet;
+            // If not tie
+            // if (winners.Count == 1) winners[0].TotalWinnings += TotalBet;
 
-			// Reset round
+            // Reset round
             CurrentPlayer = null; // No active player
             HasRoundFinished = true;
         }
@@ -199,14 +213,14 @@ namespace BlackJackTeamProject.Models
             Dictionary<Player, float> allPlayerScores = new Dictionary<Player, float>();
             List<Player> playersWithTopScore = new List<Player>();
             float topScore;
-			int totalBet = 0;
+            //int totalBet = 0;
 
             // Iterates through each player to get all scores
             for (int i = 0; i < Players.Count; i++)
             {
                 Player player = Players[i];
-                allPlayerScores.Add(player, player.RoundScore);
-				totalBet += player.BetAmount;
+                allPlayerScores.Add(player, player.HandScore);
+                //totalBet += player.BetAmount;
             }
 
             // Sets the top score
