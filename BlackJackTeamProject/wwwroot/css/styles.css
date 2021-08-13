@@ -28,7 +28,6 @@ img:hover {
 }
 
 #Player{
-
     width: 400px;
     font-size: 25px;
     border: black solid 5px;
@@ -62,4 +61,16 @@ img:hover {
 
 #formPlayer {
     display: show
+}
+
+#winners {  
+    margin:auto;
+    width: fit-content;
+    color:red;
+}   
+
+#scores {
+    width: 300px;
+    margin: auto;
+    color: white;
 }
