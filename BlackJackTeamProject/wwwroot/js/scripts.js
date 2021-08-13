@@ -33,7 +33,7 @@ function startDealer() {
             hitDealer();
         }, 1000);
     }
-    // create interval which calls dealer hit
+
 }
 
 function showActive(currentPlayer) {
@@ -65,6 +65,7 @@ function showAllHands() {
             if (data.gameState === "roundover") {
                 clearInterval(clear);
                 clear = undefined;
+                dealerIsRunning = false;
             }
             console.log(clear, "clear");
             $(".player" + " " + "div").empty();
