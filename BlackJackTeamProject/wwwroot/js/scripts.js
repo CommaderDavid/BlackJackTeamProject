@@ -47,6 +47,34 @@ function showRounds(currentRound, totalRounds) {
     $("#rounds").html(sentence);
 }
 
+function showScores(players, dealerScore) {
+    $("#playerscores").empty();
+    players.forEach(function (s) {
+        $("#playerscores").append("<li>" + s + "</li>");
+    });
+    $("#dealerscore").empty();
+    $("#dealerscore").append(dealerScore);
+}
+
+function showWinners(winners,dealerWon) {
+
+    var dealerNum = dealerWon ? 1 : 0;
+    $("#winners").empty();
+    if ((winners.length + dealerNum) === 1) {
+        $("#winners").append("<h1>" + "Winners" + "</h1>");
+    } else if ((winners.length + dealerNum) > 1) {
+        $("#winners").append("<h1>" + "Winners" + "</h1>");
+    }
+    if (dealerWon) {
+        $("#winners").append("<h2>" + "Dealer" + "</h2>");
+    }
+    
+    winners.forEach(function (s) {
+        $("#winners").append("<h2>" + (s + 1) + "</h2>");
+    });
+  
+}
+
 
 function showAllHands() {
     fetch('http://localhost:5000/getallhands/' + rndNumber, {
@@ -60,8 +88,10 @@ function showAllHands() {
         }
     }).then(results => {
         results.json().then(data => {
+            showWinners(data.playerWinners,data.dealerWon);
             showRounds(data.currentRound, data.totalRounds);
             showActive(data.currentPlayer);
+            showScores(data.playerScores, data.dealerScore);
             if (data.gameState === "roundover") {
                 clearInterval(clear);
                 clear = undefined;

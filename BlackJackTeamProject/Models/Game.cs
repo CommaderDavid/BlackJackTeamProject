@@ -17,13 +17,18 @@ namespace BlackJackTeamProject.Models
         public int CurrentRound = 0;
         public int TotalRounds { get; set; }
         public bool HasRoundFinished { get; set; }
+        public bool HasGameFinished { get; set; }
+        public bool HasStartedGame { get; set; }
 
         public int NumberPlayers { get; set; }
+
+        public List<Player> Winners = new List<Player>();
+        public List<Player> GameWinners = new List<Player>();
+        public bool DealerWins { get; set; }
 
         // public int TotalBet { get; set; }
 
         // Deals out cards & sets active player
-
         public Game(int id, int totalRounds)
         {
             Id = id;
@@ -34,27 +39,24 @@ namespace BlackJackTeamProject.Models
         {
             Players.ForEach(x => x.Hand = new List<Card>());
             Players.ForEach(x => x.HandScore = 0);
+            Dealer.HandScore = 0;
+            Dealer.Hand = new List<Card>();
         }
 
         public void StartGame()
         {
             CurrentRound++;
             HasRoundFinished = false;
+            HasGameFinished = false;
             ResetPlayers();
             CurrentPlayerIndex = 0;
             System.Console.WriteLine("Player count: " + Players.Count);
-            CurrentPlayer = Players[CurrentPlayerIndex]; // Set player 1 as active
+            CurrentPlayer = Players[CurrentPlayerIndex]; // Set player 1 as active player
 
-            // Set up bet
-            // for (int i = 0; i < Players.Count; i++)
-            // {
-            //     TotalBet += Players[i].BetAmount;
-            // }
-
-            Dealer = new Dealer();
             Deck.Shuffle(); // Shuffle the deck
 
             Deal(); // Deal cards
+            HasStartedGame = true;
         }
 
         // Deal 2 cards to each player
@@ -91,33 +93,11 @@ namespace BlackJackTeamProject.Models
             {
                 Bust();
             }
-
-            // CPU's automated turn
-            else if (CurrentPlayer.IsCPU)
-            {
-                Random rand = new Random();
-
-                // Handle difficulties
-                switch (CurrentPlayer.cpuDifficulty)
-                {
-                    // Easy difficulty
-                    case Player.CpuDifficulty.Easy:
-
-                        if (CurrentPlayer.HandScore >= 17)
-                        {
-                            // Pick random # between 0 and 10
-                            if (rand.Next(0, 11) < 5) Hit();
-                            else Hold();
-                        }
-
-                        break;
-                }
-            }
         }
 
         public void DealerHit()
         {
-           // if (HasRoundFinished) return;
+            // if (HasRoundFinished) return;
 
             Card newCard = Deck.DealCard(); // Get new card
             Dealer.Hand.Add(newCard); // Add card to player's hand
@@ -177,12 +157,23 @@ namespace BlackJackTeamProject.Models
             // Hand out winnings for round
             List<Player> winners = GetRoundWinners();
 
-            // If not tie
-            // if (winners.Count == 1) winners[0].TotalWinnings += TotalBet;
-
             // Reset round
             CurrentPlayer = null; // No active player
             HasRoundFinished = true;
+
+            // If no rounds left, end game
+            if (CurrentRound == TotalRounds)
+            {
+                GetGameWinners();
+                string test = "Game has ended! Winners are: ";
+                if (GameWinners.Count == 0) test += "Dealer";
+                foreach (Player player in GameWinners)
+                {
+                    test += player.Id + ", ";
+                }
+                System.Console.WriteLine(test);
+                HasGameFinished = true;
+            }
         }
 
         // Changes play to next player's turn
@@ -199,40 +190,64 @@ namespace BlackJackTeamProject.Models
             else
             {
                 CurrentPlayer = Players[CurrentPlayerIndex]; // Set current player
-
-                // If CPU, take CPU's turn
-                if (CurrentPlayer.IsCPU)
-                {
-                    Hit();
-                }
+                // If CPU, take CPU's turn  
             }
+        }
+
+        public List<Player> GetGameWinners()
+        {
+            float topScore = Dealer.TotalScore;
+            List<Player> playersToBeatDealer = new List<Player>();
+
+            foreach (Player player in Players)
+            {
+                if (player.TotalScore > topScore) playersToBeatDealer.Add(player);
+            }
+
+            if (Dealer.TotalScore > 0 && (playersToBeatDealer.Count == 0 || (playersToBeatDealer.Count > 0 && playersToBeatDealer[0].TotalScore == Dealer.TotalScore)))
+            {
+                DealerWins = true;
+            }
+
+            GameWinners = playersToBeatDealer;
+            return playersToBeatDealer;
         }
 
         public List<Player> GetRoundWinners()
         {
-            Dictionary<Player, float> allPlayerScores = new Dictionary<Player, float>();
-            List<Player> playersWithTopScore = new List<Player>();
-            float topScore;
-            //int totalBet = 0;
+            List<Player> playersWhoBeatDealer = new List<Player>();
+            bool isTieWithDealer = false;
 
-            // Iterates through each player to get all scores
-            for (int i = 0; i < Players.Count; i++)
+            foreach (Player player in Players)
             {
-                Player player = Players[i];
-                allPlayerScores.Add(player, player.HandScore);
-                //totalBet += player.BetAmount;
+                // If not busted, give points
+                if (player.HandScore > 0)
+                {
+                    // If player is winner
+                    if (player.HandScore > Dealer.HandScore)
+                    {
+                        playersWhoBeatDealer.Add(player);
+                        player.TotalScore += (float)1;
+                    }
+
+                    // Tie
+                    else if (player.HandScore == Dealer.HandScore)
+                    {
+                        player.TotalScore += (float)0.5;
+                        isTieWithDealer = true;
+                    }
+                }
             }
 
-            // Sets the top score
-            topScore = allPlayerScores.Values.Max();
-
-            // Iterates through each score to determine which players scored the highest
-            foreach (KeyValuePair<Player, float> kvp in allPlayerScores)
+            // If dealer did not bust, give points
+            if (Dealer.HandScore > 0)
             {
-                if (kvp.Value >= topScore) playersWithTopScore.Add(kvp.Key);
+                // Handle dealer winning/tying
+                if (isTieWithDealer) Dealer.TotalScore += (float)0.5;
+                else if (playersWhoBeatDealer.Count == 0) Dealer.TotalScore += (float)1;
             }
 
-            return playersWithTopScore;
+            return playersWhoBeatDealer;
         }
     }
 }
