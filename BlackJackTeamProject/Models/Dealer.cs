@@ -16,14 +16,11 @@ namespace BlackJackTeamProject.Models
 
         public void AlterAceValueToGet17Plus()
         {
-            List<Card> aces = Hand.Where(x => x.Rank == "Ace").ToList();
+            bool isThereAnAce = Hand.Any(x => x.Rank == "Ace");
 
-            foreach (Card ace in aces)
+            if (isThereAnAce && (HandScore + 10 >= 17 && HandScore + 10 <= 21))
             {
-                if (HandScore + 10 >= 17 && HandScore + 10 <= 21)
-                {
-                    HandScore += 10;
-                }
+                HandScore += 10;
             }
         }
     }
