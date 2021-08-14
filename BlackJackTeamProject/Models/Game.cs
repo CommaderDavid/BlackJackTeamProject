@@ -190,7 +190,7 @@ namespace BlackJackTeamProject.Models
                 DealerWins = true;
                 GameWinners = Players.Where(x => x.TotalScore == dealerScore).ToList();
             }
-            else
+            else if (playerScore > 0)
             {
                 GameWinners = Players.Where(x => x.TotalScore == playerScore).ToList();
             }
