@@ -55,6 +55,5 @@ namespace BlackJackTeamProject.Models
             Deck.deck.RemoveAt(0);
             return card;
         }
-
     }
 }

@@ -23,14 +23,11 @@ namespace BlackJackTeamProject.Models
 
         public void GetAceScore()
         {
-            List<Card> aces = Hand.Where(x => x.Rank == "Ace").ToList();
+            bool isThereAnAce = Hand.Any(x => x.Rank == "Ace");
 
-            foreach (Card ace in aces)
+            if (isThereAnAce && HandScore + 10 <= 21)
             {
-                if (HandScore + 10 <= 21)
-                {
-                    HandScore += 10;
-                }
+                HandScore += 10;
             }
         }
     }
