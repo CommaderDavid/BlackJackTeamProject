@@ -26,8 +26,6 @@ namespace BlackJackTeamProject.Models
         public List<Player> GameWinners = new List<Player>();
         public bool DealerWins { get; set; }
 
-        // public int TotalBet { get; set; }
-
         // Deals out cards & sets active player
         public Game(int id, int totalRounds)
         {
@@ -98,42 +96,26 @@ namespace BlackJackTeamProject.Models
         public void DealerHit()
         {
             // if (HasRoundFinished) return;
-
             Card newCard = Deck.DealCard(); // Get new card
             Dealer.Hand.Add(newCard); // Add card to player's hand
             Console.WriteLine("Dealer got a " + newCard.Value);
             Console.WriteLine("Dealer now has " + Dealer.Hand.Count + " cards");
-            if (newCard.Rank == "Ace")
-            {
-                if (Dealer.HandScore + 11 <= 21)
-                {
-                    Dealer.HandScore += 11; // Update player's score
-                }
-                else
-                {
-                    Dealer.HandScore += 1; // Update player's score
-                }
-            }
-            else
-            {
-                Dealer.HandScore += newCard.Value; // Update player's score
-            }
+
+            Dealer.HandScore += newCard.Value; // Update player's score
 
             Console.WriteLine("Dealer now has a score of " + Dealer.HandScore);
-
-
+            Dealer.AlterAceValueToGet17Plus();
+            if (Dealer.HandScore >= 17 && Dealer.HandScore <= 21)
+            {
+                System.Console.WriteLine("Dealer score is 17+");
+                EndGame();
+                return;
+            }
             // Check for bust
             if (Dealer.HandScore > 21)
             {
                 System.Console.WriteLine("Dealer score is 22+");
                 Bust(true);
-                EndGame();
-                return;
-            }
-
-            if (Dealer.HandScore >= 17)
-            {
-                System.Console.WriteLine("Dealer score is 17+");
                 EndGame();
                 return;
             }
@@ -190,7 +172,7 @@ namespace BlackJackTeamProject.Models
             else
             {
                 CurrentPlayer = Players[CurrentPlayerIndex]; // Set current player
-                // If CPU, take CPU's turn  
+
             }
         }
 
