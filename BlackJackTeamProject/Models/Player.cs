@@ -9,10 +9,10 @@ namespace BlackJackTeamProject.Models
 
         public int HandScore { get; set; }
         public List<Card> Hand = new List<Card>();
-	
-	
+
+
         // public int BetAmount { get; set; }
-		public float TotalScore { get; set; }
+        public float TotalScore { get; set; }
 
         public Player(int id)
         {

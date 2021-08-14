@@ -176,23 +176,24 @@ namespace BlackJackTeamProject.Models
             }
         }
 
-        public List<Player> GetGameWinners()
+        public void GetGameWinners()
         {
-            float topScore = Dealer.TotalScore;
-            List<Player> playersToBeatDealer = new List<Player>();
+            float dealerScore = Dealer.TotalScore;
+            float playerScore = Players.Max(x => x.TotalScore);
 
-            foreach (Player player in Players)
-            {
-                if (player.TotalScore > topScore) playersToBeatDealer.Add(player);
-            }
-
-            if (Dealer.TotalScore > 0 && (playersToBeatDealer.Count == 0 || (playersToBeatDealer.Count > 0 && playersToBeatDealer[0].TotalScore == Dealer.TotalScore)))
+            if (dealerScore > playerScore)
             {
                 DealerWins = true;
             }
-
-            GameWinners = playersToBeatDealer;
-            return playersToBeatDealer;
+            else if ((dealerScore == playerScore) && dealerScore > 0)
+            {
+                DealerWins = true;
+                GameWinners = Players.Where(x => x.TotalScore == dealerScore).ToList();
+            }
+            else
+            {
+                GameWinners = Players.Where(x => x.TotalScore == playerScore).ToList();
+            }
         }
 
         public List<Player> GetRoundWinners()
