@@ -35,7 +35,7 @@ namespace BlackJackTeamProject.Controllers
             }
             List<List<Card>> hands = game.Players.Select(x => x.Hand).ToList();
             hands.Add(game.Dealer.Hand);
-            foreach(Player player in game.GameWinners)
+            foreach (Player player in game.GameWinners)
             {
                 System.Console.WriteLine(player.Id + " " + player.TotalScore + " won");
             }
@@ -48,7 +48,7 @@ namespace BlackJackTeamProject.Controllers
                 totalRounds = game.TotalRounds,
                 playerScores = playerScores,
                 dealerScore = game.Dealer.TotalScore,
-                playerWinners = game.GameWinners.Select(x=>x.Id).ToList(),
+                playerWinners = game.GameWinners.Select(x => x.Id).ToList(),
                 dealerWon = game.DealerWins
             };
         }
@@ -65,6 +65,7 @@ namespace BlackJackTeamProject.Controllers
                 System.Console.WriteLine(game.Players.Count + " players joined");
             }
         }
+
 
         [HttpPost]
         [Route("/hit/{id}")]
@@ -87,9 +88,10 @@ namespace BlackJackTeamProject.Controllers
         public void hold(int id)
         {
             Game game = Game.games.Find(x => x.Id == id);
-            if(game.CurrentPlayer != null){
+            if (game.CurrentPlayer != null)
+            {
                 game.ChangePlayerTurn();
-            }   
+            }
         }
 
         [HttpPost]
@@ -97,6 +99,7 @@ namespace BlackJackTeamProject.Controllers
         public void MakePlayer(int number, int id, int rounds)
         {
             System.Console.WriteLine("Making game " + number + " for game " + id);
+            Game.games.RemoveAll(x => x.Id == id);
             Game game = new Game(id, rounds);
             Game.games.Add(game);
             for (int i = 0; i < number; i++)
