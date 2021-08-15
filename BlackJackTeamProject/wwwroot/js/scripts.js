@@ -158,6 +158,7 @@ function hitMe() {
 }
 
 function createPlayerDivs(num) {
+    $("#playerdivs").empty();
     for (var i = 1; i <= num; i++) {
         let div = '<div class="player" id="player' + i + '"><div></div></div>'
         $("#playerdivs").append(div);
@@ -197,7 +198,7 @@ function startGame() {
 
 
 $(document).ready(function () {
-
+    $("#game").hide();
     $("#newroundButton").click(function (e) {
         e.preventDefault();
         startGame();
