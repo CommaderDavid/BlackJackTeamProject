@@ -1,11 +1,3 @@
-// $(document).ready(function () {
-//     console.log("pageload");
-//     $(".switch").click(function () {
-//         $("#first").toggle();
-//         $("#game").toggle();
-//     });
-// });
-
 let dealerIsRunning = false;
 var clear;
 let rndNumber = parseInt(Math.random() * 10000000);
@@ -97,10 +89,8 @@ function showAllHands() {
                 clear = undefined;
                 dealerIsRunning = false;
             }
-            console.log(clear, "clear");
             $(".player" + " " + "div").empty();
             $("#dealer" + " " + "div").empty();
-            console.log(data, "data");
             dealer = data.hands.splice(-1);
             dealer[0].forEach(function (c) {
                 let char = c.rank.charAt(0);
@@ -170,7 +160,7 @@ function hitMe() {
 function createPlayerDivs(num) {
     for (var i = 1; i <= num; i++) {
         let div = '<div class="player" id="player' + i + '"><div></div></div>'
-        $("#game").append(div);
+        $("#playerdivs").append(div);
     }
 }
 
@@ -222,7 +212,6 @@ $(document).ready(function () {
 
         $("#game").toggle();
     })
-
 
     $('#HitButton').click(function (e) {
         e.preventDefault();
