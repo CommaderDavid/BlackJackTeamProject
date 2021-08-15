@@ -48,7 +48,7 @@ function showScores(players, dealerScore) {
     $("#dealerscore").append(dealerScore);
 }
 
-function showWinners(winners,dealerWon) {
+function showWinners(winners, dealerWon) {
 
     var dealerNum = dealerWon ? 1 : 0;
     $("#winners").empty();
@@ -60,11 +60,11 @@ function showWinners(winners,dealerWon) {
     if (dealerWon) {
         $("#winners").append("<h2>" + "Dealer" + "</h2>");
     }
-    
+
     winners.forEach(function (s) {
         $("#winners").append("<h2>" + (s + 1) + "</h2>");
     });
-  
+
 }
 
 
@@ -80,7 +80,7 @@ function showAllHands() {
         }
     }).then(results => {
         results.json().then(data => {
-            showWinners(data.playerWinners,data.dealerWon);
+            showWinners(data.playerWinners, data.dealerWon);
             showRounds(data.currentRound, data.totalRounds);
             showActive(data.currentPlayer);
             showScores(data.playerScores, data.dealerScore);
@@ -197,11 +197,9 @@ function startGame() {
 
 
 $(document).ready(function () {
-    $("#game").toggle();
 
     $("#newroundButton").click(function (e) {
         e.preventDefault();
-        console.log("adslkfjasd;fa");
         startGame();
     })
 
@@ -210,7 +208,7 @@ $(document).ready(function () {
         let numberPlayers = $('#players').val();
         createPlayers(numberPlayers);
 
-        $("#game").toggle();
+        $("#game").show()
     })
 
     $('#HitButton').click(function (e) {
