@@ -43,12 +43,11 @@ namespace BlackJackTeamProject.Models
 
         public void StartGame()
         {
+            HasGameFinished = false; ;
             CurrentRound++;
             HasRoundFinished = false;
-            HasGameFinished = false;
             ResetPlayers();
             CurrentPlayerIndex = 0;
-            System.Console.WriteLine("Player count: " + Players.Count);
             CurrentPlayer = Players[CurrentPlayerIndex]; // Set player 1 as active player
 
             Deck.Shuffle(); // Shuffle the deck
@@ -82,9 +81,6 @@ namespace BlackJackTeamProject.Models
             Card newCard = Deck.DealCard(); // Get new card
             CurrentPlayer.Hand.Add(newCard); // Add card to player's hand
             CurrentPlayer.HandScore += newCard.Value; // Update player's score
-            System.Console.WriteLine("Player " + CurrentPlayer.Id + " got a " + newCard.Value);
-            System.Console.WriteLine("Player " + CurrentPlayer.Id + " now has " + CurrentPlayer.Hand.Count + " cards");
-            System.Console.WriteLine("Player " + CurrentPlayer.Id + " now has a score of " + CurrentPlayer.HandScore);
 
             // Check for bust
             if (CurrentPlayer.HandScore > 21)
@@ -95,28 +91,24 @@ namespace BlackJackTeamProject.Models
 
         public void DealerHit()
         {
-            // if (HasRoundFinished) return;
+            if (HasRoundFinished) return;
             Card newCard = Deck.DealCard(); // Get new card
             Dealer.Hand.Add(newCard); // Add card to player's hand
-            Console.WriteLine("Dealer got a " + newCard.Value);
-            Console.WriteLine("Dealer now has " + Dealer.Hand.Count + " cards");
 
             Dealer.HandScore += newCard.Value; // Update player's score
 
-            Console.WriteLine("Dealer now has a score of " + Dealer.HandScore);
+   
             Dealer.AlterAceValueToGet17Plus();
             if (Dealer.HandScore >= 17 && Dealer.HandScore <= 21)
             {
-                System.Console.WriteLine("Dealer score is 17+");
-                EndGame();
+                EndRound();
                 return;
             }
             // Check for bust
             if (Dealer.HandScore > 21)
             {
-                System.Console.WriteLine("Dealer score is 22+");
                 Bust(true);
-                EndGame();
+                EndRound();
                 return;
             }
         }
@@ -134,10 +126,10 @@ namespace BlackJackTeamProject.Models
             }
         }
 
-        public void EndGame()
+        public void EndRound()
         {
             // Hand out winnings for round
-            List<Player> winners = GetRoundWinners();
+            GetRoundWinners();
 
             // Reset round
             CurrentPlayer = null; // No active player
@@ -147,13 +139,6 @@ namespace BlackJackTeamProject.Models
             if (CurrentRound == TotalRounds)
             {
                 GetGameWinners();
-                string test = "Game has ended! Winners are: ";
-                if (GameWinners.Count == 0) test += "Dealer";
-                foreach (Player player in GameWinners)
-                {
-                    test += player.Id + ", ";
-                }
-                System.Console.WriteLine(test);
                 HasGameFinished = true;
             }
         }
@@ -172,7 +157,6 @@ namespace BlackJackTeamProject.Models
             else
             {
                 CurrentPlayer = Players[CurrentPlayerIndex]; // Set current player
-
             }
         }
 
@@ -196,41 +180,75 @@ namespace BlackJackTeamProject.Models
             }
         }
 
-        public List<Player> GetRoundWinners()
+        public void GetRoundWinners()
         {
-            List<Player> playersWhoBeatDealer = new List<Player>();
-            bool isTieWithDealer = false;
 
-            foreach (Player player in Players)
+            float dealerScore = Dealer.HandScore;
+            float playerScore = Players.Max(x => x.HandScore);
+            List<Player> roundWinners = new List<Player>();
+
+            if (dealerScore > playerScore)
             {
-                // If not busted, give points
-                if (player.HandScore > 0)
+                Dealer.TotalScore += (float)1;
+            }
+            else if ((dealerScore == playerScore) && dealerScore > 0)
+            {
+                roundWinners = Players.Where(x => x.HandScore == dealerScore).ToList();
+                foreach (Player player in roundWinners)
                 {
-                    // If player is winner
-                    if (player.HandScore > Dealer.HandScore)
-                    {
-                        playersWhoBeatDealer.Add(player);
-                        player.TotalScore += (float)1;
-                    }
+                    player.TotalScore += (float)0.5;
+                }
 
-                    // Tie
-                    else if (player.HandScore == Dealer.HandScore)
+            }
+            else if (playerScore > 0)
+            {
+                roundWinners = Players.Where(x => x.HandScore == playerScore).ToList();
+                if (roundWinners.Count > 1)
+                {
+                    foreach (Player player in roundWinners)
                     {
-                        player.TotalScore += (float)0.5;
-                        isTieWithDealer = true;
+                        player.TotalScore += (float)0.5f;
                     }
+                }
+                else
+                {
+                    roundWinners[0].TotalScore += (float)1;
                 }
             }
 
-            // If dealer did not bust, give points
-            if (Dealer.HandScore > 0)
-            {
-                // Handle dealer winning/tying
-                if (isTieWithDealer) Dealer.TotalScore += (float)0.5;
-                else if (playersWhoBeatDealer.Count == 0) Dealer.TotalScore += (float)1;
-            }
 
-            return playersWhoBeatDealer;
+
+
+            // foreach (Player player in Players)
+            // {
+            //     // If not busted, give points
+            //     if (player.HandScore > 0)
+            //     {
+            //         // If player is winner
+            //         if (player.HandScore > Dealer.HandScore)
+            //         {
+            //             playersWhoBeatDealer.Add(player);
+            //             player.TotalScore += (float)1;
+            //         }
+
+            //         // Tie
+            //         else if (player.HandScore == Dealer.HandScore)
+            //         {
+            //             player.TotalScore += (float)0.5;
+            //             isTieWithDealer = true;
+            //         }
+            //     }
+            // }
+
+            // // If dealer did not bust, give points
+            // if (Dealer.HandScore > 0)
+            // {
+            //     // Handle dealer winning/tying
+            //     if (isTieWithDealer) Dealer.TotalScore += (float)0.5;
+            //     else if (playersWhoBeatDealer.Count == 0) Dealer.TotalScore += (float)1;
+            // }
+
+            // return playersWhoBeatDealer;
         }
     }
 }

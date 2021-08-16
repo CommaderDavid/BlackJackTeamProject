@@ -25,7 +25,7 @@ namespace BlackJackTeamProject.Models
         {
             bool isThereAnAce = Hand.Any(x => x.Rank == "Ace");
 
-            if (isThereAnAce && HandScore + 10 <= 21)
+            if (isThereAnAce && (HandScore + 10 <= 21))
             {
                 HandScore += 10;
             }

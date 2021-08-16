@@ -24,6 +24,11 @@ namespace BlackJackTeamProject.Controllers
             Game game = Game.games.Find(x => x.Id == id);
             string gameState = "";
             List<float> playerScores = game.Players.Select(x => x.TotalScore).ToList();
+            if (game.HasGameFinished == true)
+            {
+                gameState = "gameover";
+            }
+            else
             if (game.CurrentPlayer == null && game.HasRoundFinished != true)
             {
                 gameState = "dealer";
@@ -31,14 +36,10 @@ namespace BlackJackTeamProject.Controllers
             else if (game.HasRoundFinished)
             {
                 gameState = "roundover";
-                System.Console.WriteLine("Round over");
             }
             List<List<Card>> hands = game.Players.Select(x => x.Hand).ToList();
             hands.Add(game.Dealer.Hand);
-            foreach (Player player in game.GameWinners)
-            {
-                System.Console.WriteLine(player.Id + " " + player.TotalScore + " won");
-            }
+          
             return new
             {
                 hands = hands,
@@ -57,22 +58,23 @@ namespace BlackJackTeamProject.Controllers
         [Route("/start/{id}")]
         public void StartGame(int id)
         {
-            System.Console.WriteLine("Starting game " + id);
             Game game = Game.games.Find(x => x.Id == id);
-            if ((game.HasStartedGame && game.HasRoundFinished) || !game.HasStartedGame)
+            if (!game.HasGameFinished && ((game.HasStartedGame && game.HasRoundFinished) || !game.HasStartedGame))
             {
                 game.StartGame();
-                System.Console.WriteLine(game.Players.Count + " players joined");
             }
         }
-
 
         [HttpPost]
         [Route("/hit/{id}")]
         public void hit(int id)
         {
             Game game = Game.games.Find(x => x.Id == id);
-            game.Hit();
+            if (game.CurrentPlayer != null)
+            {
+                game.Hit();
+            }
+
         }
 
         [HttpPost]
@@ -80,6 +82,7 @@ namespace BlackJackTeamProject.Controllers
         public void dealerHit(int id)
         {
             Game game = Game.games.Find(x => x.Id == id);
+
             game.DealerHit();
         }
 
@@ -90,7 +93,7 @@ namespace BlackJackTeamProject.Controllers
             Game game = Game.games.Find(x => x.Id == id);
             if (game.CurrentPlayer != null)
             {
-                game.ChangePlayerTurn();
+                game.Hold();
             }
         }
 
@@ -98,7 +101,6 @@ namespace BlackJackTeamProject.Controllers
         [Route("/makeplayer/{number}/{id}/{rounds}")]
         public void MakePlayer(int number, int id, int rounds)
         {
-            System.Console.WriteLine("Making game " + number + " for game " + id);
             Game.games.RemoveAll(x => x.Id == id);
             Game game = new Game(id, rounds);
             Game.games.Add(game);
