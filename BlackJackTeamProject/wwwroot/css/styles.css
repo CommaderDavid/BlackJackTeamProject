@@ -76,6 +76,7 @@ img:hover {
     margin:auto;
     width: fit-content;
     color:red;
+    text-align: center;
 }   
 
 #playerdivs{

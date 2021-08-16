@@ -1,7 +1,6 @@
 let dealerIsRunning = false;
 var clear;
 let rndNumber = parseInt(Math.random() * 10000000);
-console.log(rndNumber);
 
 function hitDealer() {
     fetch('http://localhost:5000/dealerhit/' + rndNumber, {
@@ -19,13 +18,11 @@ function hitDealer() {
 }
 
 function startDealer() {
-
     if (clear === undefined) {
         clear = setInterval(function () {
             hitDealer();
         }, 1000);
     }
-
 }
 
 function showActive(currentPlayer) {
@@ -48,10 +45,15 @@ function showScores(players, dealerScore) {
     $("#dealerscore").append(dealerScore);
 }
 
-function showWinners(winners, dealerWon) {
 
-    var dealerNum = dealerWon ? 1 : 0;
+
+function showWinners(winners, dealerWon) {
+    $("#winners").show();
     $("#winners").empty();
+    let dealerNum = dealerWon ? 1 : 0;
+
+    $("#winners").append('<button type="button" onClick="window.location.reload();">Play Again?</button>');
+
     if ((winners.length + dealerNum) === 1) {
         $("#winners").append("<h1>" + "Winners" + "</h1>");
     } else if ((winners.length + dealerNum) > 1) {
@@ -62,11 +64,10 @@ function showWinners(winners, dealerWon) {
     }
 
     winners.forEach(function (s) {
-        $("#winners").append("<h2>" + (s + 1) + "</h2>");
+        $("#winners").append("<h2>" + "Player " + (s + 1) + "</h2>");
     });
 
 }
-
 
 function showAllHands() {
     fetch('http://localhost:5000/getallhands/' + rndNumber, {
@@ -80,15 +81,20 @@ function showAllHands() {
         }
     }).then(results => {
         results.json().then(data => {
-            showWinners(data.playerWinners, data.dealerWon);
+            if (data.gameState == "gameover") {
+                showWinners(data.playerWinners, data.dealerWon);
+            }
+
             showRounds(data.currentRound, data.totalRounds);
             showActive(data.currentPlayer);
             showScores(data.playerScores, data.dealerScore);
-            if (data.gameState === "roundover") {
+            
+            if (data.gameState === "roundover" || data.gameState === "gameover") {
                 clearInterval(clear);
                 clear = undefined;
                 dealerIsRunning = false;
             }
+
             $(".player" + " " + "div").empty();
             $("#dealer" + " " + "div").empty();
             dealer = data.hands.splice(-1);
@@ -122,9 +128,7 @@ function showAllHands() {
                 dealerIsRunning = true;
                 startDealer();
             }
-
         }
-
         );
     });
 }
@@ -198,6 +202,7 @@ function startGame() {
 
 
 $(document).ready(function () {
+    $("#winners").hide();
     $("#game").hide();
     $("#newroundButton").click(function (e) {
         e.preventDefault();
@@ -210,6 +215,7 @@ $(document).ready(function () {
         createPlayers(numberPlayers);
 
         $("#game").show()
+        $("#first").hide()
     })
 
     $('#HitButton').click(function (e) {
