@@ -97,7 +97,7 @@ namespace BlackJackTeamProject.Models
 
             Dealer.HandScore += newCard.Value; // Update player's score
 
-   
+
             Dealer.AlterAceValueToGet17Plus();
             if (Dealer.HandScore >= 17 && Dealer.HandScore <= 21)
             {
@@ -215,40 +215,6 @@ namespace BlackJackTeamProject.Models
                     roundWinners[0].TotalScore += (float)1;
                 }
             }
-
-
-
-
-            // foreach (Player player in Players)
-            // {
-            //     // If not busted, give points
-            //     if (player.HandScore > 0)
-            //     {
-            //         // If player is winner
-            //         if (player.HandScore > Dealer.HandScore)
-            //         {
-            //             playersWhoBeatDealer.Add(player);
-            //             player.TotalScore += (float)1;
-            //         }
-
-            //         // Tie
-            //         else if (player.HandScore == Dealer.HandScore)
-            //         {
-            //             player.TotalScore += (float)0.5;
-            //             isTieWithDealer = true;
-            //         }
-            //     }
-            // }
-
-            // // If dealer did not bust, give points
-            // if (Dealer.HandScore > 0)
-            // {
-            //     // Handle dealer winning/tying
-            //     if (isTieWithDealer) Dealer.TotalScore += (float)0.5;
-            //     else if (playersWhoBeatDealer.Count == 0) Dealer.TotalScore += (float)1;
-            // }
-
-            // return playersWhoBeatDealer;
         }
     }
 }
