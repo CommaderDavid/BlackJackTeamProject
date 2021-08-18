@@ -4,7 +4,7 @@
 </h1>
 
 <p align = "center">
-This application allows the user play a game of BlackJack with up to four players against an AI operated dealer </p>
+This application allows the user to play a game of BlackJack with up to four players against an AI operated dealer </p>
 <p align = "center"> Created July 30th, 2021 </p>
 
 <p align = "center">
